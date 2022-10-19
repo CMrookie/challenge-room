@@ -9,7 +9,19 @@ import { Layout } from './layout'
 <script lang="tsx">
 export default defineComponent({
   setup() {
-    return () => <div>main</div>
+    // const orientation = ref<number | null>(null)
+    // window.addEventListener(
+    //   'onorientationchange' in window ? 'orientationchange' : 'resize ',
+    //   (e) => {
+    //     console.log(e)
+    //     orientation.value = window.orientation
+    //   }
+    // )
+    return () => (
+      <>
+        <div>main</div>
+      </>
+    )
   }
 })
 </script>
