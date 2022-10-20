@@ -9,10 +9,10 @@ import { devLog } from '@/utils/devLog'
  * 目前只能退而为views使用sfc写法，否则只能同步应用
  */
 // const Layout = () => import('@/components/layout/index.vue')
-const Login = () => import('@/views/login.vue')
-const Scan = () => import('@/views/scan.vue')
-const Test = () => import('@/views/test.vue')
-const Archives = () => import('@/views/archives.vue')
+const Login = () => import('@/views/challnegeLogin.vue')
+const Scan = () => import('@/views/challengeScan.vue')
+const Test = () => import('@/views/challengeTest.vue')
+const Archives = () => import('@/views/challengeArchives.vue')
 
 const routes: RouteRecordRaw[] = [
   {

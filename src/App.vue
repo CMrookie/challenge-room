@@ -43,9 +43,10 @@ export default defineComponent({
       part10
     ]
     // console.log(preloadList)
+
+    // <LoadProgress preloadList={preloadList}></LoadProgress>
     return () => (
       <>
-        <LoadProgress preloadList={preloadList}></LoadProgress>
         <router-view
           v-slots={{
             default: (scope: { Component: unknown; route: RouteLocation }) => (
