@@ -29,6 +29,11 @@ module.exports = {
         quit: "url('./src/assets/images/icon-03.png')",
         tick: "url('./src/assets/images/icon-04.png')",
         cross: "url('./src/assets/images/icon-05.png')",
+        time: "url('./src/assets/images/part-01.png')",
+        progress: "url('./src/assets/images/part-02.png')",
+        title: "url('./src/assets/images/part-03.png')",
+        'card-title': "url('./src/assets/images/part-04.png')",
+        'score-wrap': "url('./src/assets/images/part-05.png')",
         star: "url('./src/assets/images/part-08.png')",
         answer: {
           right: "url('./src/assets/images/part-09.png')",

@@ -43,7 +43,9 @@ export default defineComponent({
       part10
     ]
     // console.log(preloadList)
-
+    document.body.addEventListener('touchstart', function (): boolean {
+      return false
+    })
     // <LoadProgress preloadList={preloadList}></LoadProgress>
     return () => (
       <>
