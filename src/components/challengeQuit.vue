@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="bg-quit bg-cover bg-no-repeat absolute right-4 w-16 h-20 top-12"
-    @click="handleClick"
-  ></div>
+  <div class="btn-quit" @click="handleClick"></div>
 </template>
 
 <script lang="ts" setup>
@@ -12,3 +9,11 @@ function handleClick() {
   emit('quit')
 }
 </script>
+
+<style>
+.btn-quit {
+  @apply bg-quit bg-cover bg-no-repeat absolute right-4 top-12;
+  width: 8vw;
+  height: 10vw;
+}
+</style>

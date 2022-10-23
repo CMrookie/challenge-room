@@ -1,26 +1,48 @@
 <template>
   <main class="w-full h-full bg-main-bg flex flex-col items-center relative">
-    <section class="container">
-      <div class="time">60s</div>
-      <div class="progress">12/20</div>
-      <div class="title">視頻答題</div>
-      <div class="h-16">zhe shi zhan wei fu</div>
-    </section>
-    <footer class="absolute bottom-0">
-      <div
-        class="bg-btn active:bg-btn-active border-2 border-solid border-black text-white text-4xl rounded tracking-widest p-5 pl-16 pr-16"
-      >
-        下一題
-      </div>
+    <div class="container-wrap">
+      <section class="container">
+        <div class="time">60s</div>
+        <div class="progress">12/20</div>
+        <div class="title">視頻答題</div>
+        <div>
+          <ChallengeQuestion></ChallengeQuestion>
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <div class="next-btn">下一題</div>
     </footer>
+    <ChallengeMask></ChallengeMask>
+    <ChallengeMask v-if="false" @click="handleClick">
+      <div class="text-white">
+        <ChallengeTip :type="'cross'"></ChallengeTip>
+      </div>
+    </ChallengeMask>
   </main>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import ChallengeQuestion from '../components/challengeQuestion.vue'
+import ChallengeMask from '../components/challengeMask.vue'
+import ChallengeTip from '../components/challengeFeeback.vue'
+
+const a = ref('a')
+
+function handleClick() {
+  a.value = 'b'
+}
+</script>
 
 <style>
+.container-wrap {
+  @apply flex items-center;
+  height: 86vh;
+  padding-top: 4vh;
+}
 .container {
-  @apply mt-14 bg-white border-solid border-black border-2 relative rounded p-9;
+  @apply bg-white border-solid border-black border-2 relative rounded p-9;
   padding-top: 15vw;
   width: 90vw;
 }
@@ -48,5 +70,16 @@
   right: 0;
   top: 3vw;
   line-height: 7vw;
+}
+.footer {
+  @apply absolute bottom-0 flex justify-center items-center;
+  height: 14vh;
+}
+.next-btn {
+  @apply bg-btn active:bg-btn-active border-2 border-solid border-black text-white rounded tracking-widest text-center;
+  width: calc(100vw / 3);
+  padding-top: 2vw;
+  padding-bottom: 2vw;
+  font-size: 4vw;
 }
 </style>
