@@ -13,7 +13,7 @@ const Login = () => import('@/views/challnegeLogin.vue')
 const Scan = () => import('@/views/challengeScan.vue')
 const Test = () => import('@/views/challengeTest.vue')
 const Archives = () => import('@/views/challengeArchives.vue')
-
+const Answer = () => import('@/views/challengeAnswer.vue')
 const routes: RouteRecordRaw[] = [
   {
     path: '/login',
@@ -26,6 +26,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/test',
     component: Test
+  },
+  {
+    path: '/answer',
+    component: Answer
   },
   {
     path: '/archives',
