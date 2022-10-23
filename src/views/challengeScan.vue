@@ -8,7 +8,7 @@
         <br />
         看誰能在最短時間答對最多的問題，當大家離開中心前，得分最高的五位可各獲得一份小禮品作為獎勵！
       </p>
-      <div class="btn-scan">
+      <div class="btn-scan" @click="handleScanClick">
         <i class="icon"></i>
         掃描二維碼開始答題
       </div>
@@ -31,12 +31,18 @@
 import { devLog } from '@/utils/devLog'
 import ChallengeQuit from '../components/challengeQuit.vue'
 
+const router = useRouter()
+
+function handleScanClick() {
+  router.push({ path: '/test' })
+}
+
 function handleQuit() {
   devLog(['quit'])
 }
 </script>
 
-<style>
+<style scoped>
 .content {
   width: 60vw;
   padding-top: 35vw;

@@ -1,7 +1,7 @@
 <template>
-  <LoadProgress></LoadProgress>
+  <LoadProgress v-if="!isLoaded" @load="handleLoad"></LoadProgress>
   <main
-    v-if="false"
+    v-if="isLoaded"
     class="bg-login-bg w-full h-full bg-no-repeat bg-center bg-cover flex items-center flex-col bg-main-bg"
   >
     <h1 id="logo" class="logo"></h1>
@@ -17,6 +17,9 @@
 
 <script lang="ts" setup>
 import LoadProgress from '../components/loadProgress.vue'
+import { useLoaded } from '../utils/useLoad'
+
+const { isLoaded, handleLoad } = useLoaded()
 const router = useRouter()
 
 function handleLogin() {
@@ -24,7 +27,7 @@ function handleLogin() {
 }
 </script>
 
-<style>
+<style scoped>
 .logo {
   @apply bg-logo bg-center bg-no-repeat bg-contain mt-24;
   width: 60vw;

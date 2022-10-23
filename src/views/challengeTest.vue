@@ -12,7 +12,7 @@
     </div>
 
     <footer class="footer">
-      <div class="next-btn">下一題</div>
+      <div class="next-btn" @click="handleNextClick">下一題</div>
     </footer>
     <ChallengeMask v-if="false">
       <ChallengeScroeBoard></ChallengeScroeBoard>
@@ -31,6 +31,12 @@ import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
 
+const router = useRouter()
+
+function handleNextClick() {
+  router.push({ path: '/archives' })
+}
+
 const a = ref('a')
 
 function handleClick() {
@@ -38,7 +44,7 @@ function handleClick() {
 }
 </script>
 
-<style>
+<style scoped>
 .container-wrap {
   @apply flex items-center;
   height: 86vh;
