@@ -46,10 +46,11 @@ function handleQuit() {
     font-size: 3vw;
   }
   .btn-scan {
-    @apply bg-btn border-2 border-black rounded flex items-center justify-center text-white;
+    @apply bg-btn border-2 border-black rounded flex items-center justify-center text-white active:bg-btn-active;
     height: 12vw;
     margin-top: 10vw;
     font-size: 4vw;
+    letter-spacing: 0.5vw;
     .icon {
       @apply bg-scan bg-no-repeat bg-cover;
       width: 6vw;
@@ -65,6 +66,7 @@ function handleQuit() {
     padding-top: 3vw;
     padding-bottom: 3vw;
     font-size: 4vw;
+    letter-spacing: 0.5vw;
     .icon {
       @apply inline-block bg-no-repeat bg-cover;
       width: 4vw;

@@ -94,6 +94,7 @@ starNum.value = 3
   width: 30vw;
   padding: 2vw;
   font-size: 4vw;
+  letter-spacing: 0.5vw;
 }
 .btn-paper {
   @apply bg-white text-black active:bg-slate-200;

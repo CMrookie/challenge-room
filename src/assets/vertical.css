@@ -1,6 +1,6 @@
 @media screen and (orientation: portrait) {   
   /*竖屏 css*/
   body {
-    @apply bg-teal-300;
+    /* @apply bg-teal-300; */
   }
 }  

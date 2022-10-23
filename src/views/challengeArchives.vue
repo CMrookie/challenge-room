@@ -127,6 +127,7 @@ import ChallengeQuit from '../components/challengeQuit.vue'
   width: 20vw;
   height: 12vw;
   font-size: 4vw;
+  letter-spacing: 0.5vw;
 }
 .footer {
   @apply absolute bottom-0 flex w-full;
@@ -135,6 +136,7 @@ import ChallengeQuit from '../components/challengeQuit.vue'
     padding-top: 3vw;
     padding-bottom: 3vw;
     font-size: 4vw;
+    letter-spacing: 0.5vw;
     .icon {
       @apply inline-block bg-no-repeat bg-cover;
       width: 4vw;

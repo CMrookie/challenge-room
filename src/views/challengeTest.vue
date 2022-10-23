@@ -14,12 +14,12 @@
     <footer class="footer">
       <div class="next-btn">下一題</div>
     </footer>
-    <ChallengeMask>
+    <ChallengeMask v-if="false">
       <ChallengeScroeBoard></ChallengeScroeBoard>
     </ChallengeMask>
     <ChallengeMask v-if="false" @click="handleClick">
       <div class="text-white">
-        <ChallengeTip :type="'cross'"></ChallengeTip>
+        <ChallengeFeeback :type="'cross'"></ChallengeFeeback>
       </div>
     </ChallengeMask>
   </main>
@@ -28,8 +28,7 @@
 <script lang="ts" setup>
 import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
-import ChallengeTip from '../components/challengeFeeback.vue'
-import ChallengeScoreBoard from '../components/challengeScroeBoard.vue'
+import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
 
 const a = ref('a')
@@ -51,29 +50,32 @@ function handleClick() {
   width: 90vw;
 }
 .time {
-  @apply bg-time bg-no-repeat bg-cover text-center text-btn absolute text-4xl font-semibold;
+  @apply bg-time bg-no-repeat bg-cover text-center text-btn absolute font-semibold;
   width: 16vw;
   height: 9vw;
   top: -1.3vw;
   text-indent: -3vw;
   line-height: 9vw;
+  font-size: 5vw;
 }
 .progress {
-  @apply bg-progress bg-no-repeat bg-cover text-center text-white absolute text-2xl;
+  @apply bg-progress bg-no-repeat bg-cover text-center text-white absolute;
   padding-top: 0.5vw;
   width: 10vw;
   height: 7vw;
   right: -1.7vw;
   top: 3vw;
+  font-size: 3vw;
 }
 .title {
-  @apply bg-title bg-no-repeat bg-cover text-btn text-3xl absolute m-auto text-center;
+  @apply bg-title bg-no-repeat bg-cover text-btn absolute m-auto text-center;
   width: 35vw;
   height: 7vw;
   left: 0;
   right: 0;
   top: 3vw;
   line-height: 7vw;
+  font-size: 4vw;
 }
 .footer {
   @apply absolute bottom-0 flex justify-center items-center;
@@ -85,5 +87,6 @@ function handleClick() {
   padding-top: 2vw;
   padding-bottom: 2vw;
   font-size: 4vw;
+  letter-spacing: 0.5vw;
 }
 </style>

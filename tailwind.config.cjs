@@ -7,9 +7,9 @@ module.exports = {
         'main-bg': '#faeedc',
         question: {
           DEFAULT: '	#f4f4f4',
-          select: '#aabbca',
-          correct: '#bddc95',
-          wrong: '#d5b5b6'
+          select: '#c8e6f9',
+          correct: '#afdd92',
+          wrong: '#f3c8c8'
         },
         btn: {
           DEFAULT: '#ff8c21',

@@ -45,7 +45,7 @@ const emit = defineEmits([''])
 
 <style>
 .question {
-  @apply text-slate-600;
+  @apply text-slate-600 font-semibold;
   font-size: 3.5vw;
 }
 .answer-oprions {
@@ -67,13 +67,13 @@ const emit = defineEmits([''])
     font-size: 3vw;
   }
   &.select {
-    @apply bg-question-select;
+    @apply bg-question-select text-btn;
     .select-icon {
       @apply bg-select-on;
     }
   }
   &.correct {
-    @apply bg-question-correct;
+    @apply bg-question-correct text-white;
     .assert-icon {
       @apply bg-tick bg-no-repeat bg-cover absolute top-0 bottom-0;
       right: 2vw;

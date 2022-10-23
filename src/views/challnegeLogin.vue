@@ -1,6 +1,8 @@
 <template>
+  <LoadProgress></LoadProgress>
   <main
-    class="bg-login-bg w-full h-full bg-no-repeat bg-center bg-cover flex items-center flex-col"
+    v-if="false"
+    class="bg-login-bg w-full h-full bg-no-repeat bg-center bg-cover flex items-center flex-col bg-main-bg"
   >
     <h1 id="logo" class="logo"></h1>
     <form action="" class="login-content">
@@ -14,6 +16,7 @@
 </template>
 
 <script lang="ts" setup>
+import LoadProgress from '../components/loadProgress.vue'
 const router = useRouter()
 
 function handleLogin() {
@@ -42,5 +45,6 @@ function handleLogin() {
   padding-top: 1vw;
   padding-bottom: 1vw;
   font-size: 5vw;
+  letter-spacing: 0.5vw;
 }
 </style>
