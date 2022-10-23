@@ -4,9 +4,10 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['quit'])
-
+const router = useRouter()
 function handleClick() {
   emit('quit')
+  router.push({ path: '/login' })
 }
 </script>
 
