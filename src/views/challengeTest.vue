@@ -14,7 +14,9 @@
     <footer class="footer">
       <div class="next-btn">下一題</div>
     </footer>
-    <ChallengeMask></ChallengeMask>
+    <ChallengeMask>
+      <ChallengeScroeBoard></ChallengeScroeBoard>
+    </ChallengeMask>
     <ChallengeMask v-if="false" @click="handleClick">
       <div class="text-white">
         <ChallengeTip :type="'cross'"></ChallengeTip>
@@ -27,6 +29,8 @@
 import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeTip from '../components/challengeFeeback.vue'
+import ChallengeScoreBoard from '../components/challengeScroeBoard.vue'
+import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
 
 const a = ref('a')
 
