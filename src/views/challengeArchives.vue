@@ -23,7 +23,7 @@
       </div>
     </div>
     <ul class="challenge-list">
-      <template v-for="i in 10" :key="i">
+      <template v-for="i in 15" :key="i">
         <li class="challenge-item">
           <div class="challenge-info">
             <div class="left">
@@ -98,6 +98,10 @@ import ChallengeQuit from '../components/challengeQuit.vue'
   height: 55vh;
   margin: 3vw 0;
 }
+.challenge-list::-webkit-scrollbar {
+   width: 0 !important;
+   height: 0px !important;
+ }
 .challenge-item {
   @apply flex justify-between;
   height: 12vw;

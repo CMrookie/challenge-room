@@ -38,7 +38,8 @@ module.exports = {
         'test-white': "url('./src/assets/images/zy_icon01a.png')",
         'test-black': "url('./src/assets/images/zy_icon01b.png')",
         'paper-white': "url('./src/assets/images/zy_icon02a.png')",
-        'paper-black': "url('./src/assets/images/zy_icon02b.png')"
+        'paper-black': "url('./src/assets/images/zy_icon02b.png')",
+        back: "url('./src/assets/images/back.png')"
       }
     }
   },
