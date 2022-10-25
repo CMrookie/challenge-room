@@ -1,5 +1,25 @@
 <script lang="tsx">
 import { PropType } from 'vue'
+import logo from '../assets/images/WechatIMG376.png'
+import scan from '../assets/images/2222.png'
+import loginbg from '../assets/images/bg.png'
+import selectoff from '../assets/images/icon-01.png'
+import selecton from '../assets/images/icon-02.png'
+import quit from '../assets/images/icon-03.png'
+import tick from '../assets/images/icon-04.png'
+import cross from '../assets/images/icon-05.png'
+import time from '../assets/images/part-01.png'
+import progress from '../assets/images/part-02.png'
+import title from '../assets/images/part-03.png'
+import cardtitle from '../assets/images/part-04.png'
+import scorewrap from '../assets/images/part-05.png'
+import star from '../assets/images/part-08.png'
+import answerright from '../assets/images/part-09.png'
+import answerwrong from '../assets/images/part-10.png'
+import testwhite from '../assets/images/zy_icon01a.png'
+import testblack from '../assets/images/zy_icon01b.png'
+import paperwhite from '../assets/images/zy_icon02a.png'
+import paperblack from '../assets/images/zy_icon02b.png'
 
 export default defineComponent({
   props: {
@@ -8,9 +28,31 @@ export default defineComponent({
       default: null
     }
   },
-  emits: {},
+  emits: ['load'],
   setup(props, { emit }) {
-    const progress = ref<number>(0)
+    const preloadList = [
+      logo,
+      scan,
+      loginbg,
+      selectoff,
+      selecton,
+      quit,
+      tick,
+      cross,
+      time,
+      progress,
+      title,
+      cardtitle,
+      scorewrap,
+      star,
+      answerright,
+      answerwrong,
+      testwhite,
+      testblack,
+      paperwhite,
+      paperblack
+    ]
+    // const progress = ref<number>(0)
     function preloadImages(imagesList: string[]) {
       let len: number = imagesList.length
       let i = 0
@@ -19,14 +61,15 @@ export default defineComponent({
         image.onload = (e) => {
           i++
           console.log(Math.floor((i / len) * 100) + '%')
-          progress.value = Math.floor(i / len) * 100
+          // progress.value = Math.floor(i / len) * 100
+          if (Math.floor(i / len) * 100 > 99) return emit('load')
         }
         image.src = item
       })
     }
     onMounted(() => {
       console.log('mounted')
-      preloadImages(props.preloadList)
+      preloadImages(preloadList)
     })
 
     return () => (

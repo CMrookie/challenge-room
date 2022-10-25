@@ -57,7 +57,7 @@
 import ChallengeQuit from '../components/challengeQuit.vue'
 </script>
 
-<style>
+<style scoped>
 .user-info {
   @apply border border-black rounded-md bg-white flex flex-row items-center;
   width: 90vw;
