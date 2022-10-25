@@ -44,12 +44,13 @@ function handleClick() {
   margin-bottom: 5vw;
 }
 .time {
-  @apply bg-time bg-no-repeat bg-cover text-center text-btn absolute text-4xl font-semibold;
+  @apply bg-time bg-no-repeat bg-cover text-center text-btn absolute font-semibold;
   width: 16vw;
   height: 9vw;
   top: -1.3vw;
   text-indent: -3vw;
   line-height: 9vw;
+  font-size: 5vw;
 }
 .progress {
   @apply bg-progress bg-no-repeat bg-cover text-center text-white absolute text-2xl;
