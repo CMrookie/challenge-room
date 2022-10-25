@@ -6,10 +6,28 @@
   >
     <h1 id="logo" class="logo"></h1>
     <form action="" class="login-content">
-      <label for="accont" class="text-3xl font-extralight">帳號</label>
-      <input id="accont" type="text" class="login-input" />
-      <label for="password" class="text-3xl mt-7 font-extralight">密碼</label>
-      <input id="password" type="password" class="login-input" />
+      <label for="accont" class="text-3xl font-extralight">
+        帳號
+        <i class="tip-text">{{ tipUsername }}</i>
+      </label>
+      <input
+        id="accont"
+        v-model="form.username"
+        type="text"
+        class="login-input"
+        @blur="checkUsername"
+      />
+      <label for="password" class="text-3xl mt-7 font-extralight">
+        密碼
+        <i class="tip-text">{{ tipPassword }}</i>
+      </label>
+      <input
+        id="password"
+        v-model="form.password"
+        type="password"
+        class="login-input"
+        @blur="checkPassword"
+      />
     </form>
     <div class="login-btn" @click="handleLogin">登錄</div>
   </main>
@@ -18,13 +36,71 @@
 <script lang="ts" setup>
 import LoadProgress from '../components/loadProgress.vue'
 import { useLoaded } from '../utils/useLoad'
+import { login } from '../api'
+import { devLog } from '@/utils/devLog'
 
 const { isLoaded, handleLoad } = useLoaded()
-const router = useRouter()
 
-function handleLogin() {
-  router.push({ path: '/scan' })
+const router = useRouter()
+const tipUsername = ref<string>('')
+const tipPassword = ref<string>('')
+// async function userLogin() {
+//   try {
+//     let res = await login(form)
+//     if (res.data.state === 200) {
+//       saveUser()
+//       return router.push({ path: '/scan' })
+//     }
+//     devLog([res])
+//     return res
+//   } catch (err) {
+//     devLog([err])
+//   }
+// }
+async function handleLogin() {
+  if (!checkForm()) return
+  try {
+    let res = await login(form)
+    if (res.data.state === 200) {
+      saveUser()
+      return router.push({ path: '/scan' })
+    }
+    return res.data
+  } catch (err) {
+    devLog([err])
+  }
 }
+
+const form = reactive({
+  username: '',
+  password: ''
+})
+function checkUsername() {
+  tipUsername.value = ''
+  if (!form.username) tipUsername.value = '請輸入帳號'
+  return form.username ? true : false
+}
+function checkPassword() {
+  tipPassword.value = ''
+  if (!form.password) tipPassword.value = '請輸入密碼'
+  return form.password ? true : false
+}
+function checkForm() {
+  let isUsername = checkUsername()
+  let isPassword = checkPassword()
+  return isUsername && isPassword ? true : false
+}
+function saveUser() {
+  localStorage.setItem('form', JSON.stringify(form))
+}
+function getUser() {
+  return JSON.parse(localStorage.getItem('form') ?? '{}')
+}
+onMounted(() => {
+  let store = getUser()
+  form.password = store?.password ?? ''
+  form.username = store?.username ?? ''
+})
 </script>
 
 <style scoped>
@@ -36,6 +112,11 @@ function handleLogin() {
 .login-content {
   @apply mt-8 flex flex-col;
   width: 60vw;
+}
+.tip-text {
+  @apply text-red-500;
+  padding-left: 2vw;
+  font-size: 3vw;
 }
 .login-input {
   @apply p-4 border-2 border-solid border-black rounded-md;

@@ -30,6 +30,7 @@ import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
+import { devLog } from '@/utils/devLog'
 
 const router = useRouter()
 
@@ -42,6 +43,30 @@ const a = ref('a')
 function handleClick() {
   a.value = 'b'
 }
+const second = ref<number>(0)
+const timer = ref<number>(null)
+function countdown(fn: CallableFunction) {
+  second.value--
+  fn()
+  function timeoutFn() {
+    if (second.value > 0) {
+      countdown(fn)
+    }
+  }
+  timer.value = window.setTimeout(timeoutFn, 1000)
+}
+
+function countdownCb() {
+  devLog([second.value])
+  if (second.value < 3) {
+    clearTimeout(timer.value)
+  }
+}
+onMounted(() => {
+  second.value = 10
+  countdown(countdownCb)
+  clearTimeout(timer.value)
+})
 </script>
 
 <style scoped>
