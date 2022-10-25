@@ -36,36 +36,25 @@
 <script lang="ts" setup>
 import LoadProgress from '../components/loadProgress.vue'
 import { useLoaded } from '../utils/useLoad'
-import { login } from '../api'
+import { login, checkToken } from '../api'
 import { devLog } from '@/utils/devLog'
+import { Snackbar } from '@varlet/ui'
 
 const { isLoaded, handleLoad } = useLoaded()
 
 const router = useRouter()
 const tipUsername = ref<string>('')
 const tipPassword = ref<string>('')
-// async function userLogin() {
-//   try {
-//     let res = await login(form)
-//     if (res.data.state === 200) {
-//       saveUser()
-//       return router.push({ path: '/scan' })
-//     }
-//     devLog([res])
-//     return res
-//   } catch (err) {
-//     devLog([err])
-//   }
-// }
+
 async function handleLogin() {
   if (!checkForm()) return
   try {
     let res = await login(form)
-    if (res.data.state === 200) {
+    if (res.data.code === 200) {
       saveUser()
       return router.push({ path: '/scan' })
     }
-    return res.data
+    return Snackbar.warning(res.data.msg)
   } catch (err) {
     devLog([err])
   }
@@ -97,6 +86,13 @@ function getUser() {
   return JSON.parse(localStorage.getItem('form') ?? '{}')
 }
 onMounted(() => {
+  //   checkToken()
+  //     .then((res: unknown) => {
+  //       devLog(['res: ', res])
+  //     })
+  //     .catch((err) => {
+  //       devLog(['err: ', err])
+  //     })
   let store = getUser()
   form.password = store?.password ?? ''
   form.username = store?.username ?? ''
