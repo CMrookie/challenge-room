@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function checkToken() {
+  return request({
+    url: '/checktoken',
+    method: 'get'
+  })
+}
+
 interface LoginData {
   username: string
   password: string

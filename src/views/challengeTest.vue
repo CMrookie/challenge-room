@@ -30,7 +30,23 @@ import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
+import { Snackbar } from '@varlet/ui'
 import { devLog } from '@/utils/devLog'
+import { getQuestions } from '@/api'
+import { useAppStore } from '@/store/app'
+
+const store = useAppStore()
+async function initTest() {
+  try {
+    let res = getQuestions({ code: store.qrCode })
+    devLog(['res: ', res])
+  } catch (err: { message: string }) {
+    Snackbar.warning(err.message)
+  }
+}
+onMounted(() => {
+  initTest()
+})
 
 const router = useRouter()
 
@@ -44,7 +60,7 @@ function handleClick() {
   a.value = 'b'
 }
 const second = ref<number>(0)
-const timer = ref<number>(null)
+const timer = ref<number>()
 function countdown(fn: CallableFunction) {
   second.value--
   fn()
@@ -57,6 +73,7 @@ function countdown(fn: CallableFunction) {
 }
 
 function countdownCb() {
+  Snackbar(second.value)
   devLog([second.value])
   if (second.value < 3) {
     clearTimeout(timer.value)
