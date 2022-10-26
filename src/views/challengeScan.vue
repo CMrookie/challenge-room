@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { devLog } from '@/utils/devLog'
 import ChallengeQuit from '../components/challengeQuit.vue'
-import { QrcodeStream } from 'qrcode-reader-vue3'
+import { QrcodeStream, QrcodeDropZone } from 'qrcode-reader-vue3'
 import { Snackbar } from '@varlet/ui'
 import { useAppStore } from '@/store/app'
 
