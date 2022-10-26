@@ -5,22 +5,28 @@
     </p>
     <slot></slot>
     <ul class="answer-oprions">
-      <li class="answer-option-item">
+      <li
+        v-for="(option, index) in options"
+        :key="index"
+        class="answer-option-item"
+        :class="setItemState(index)"
+        @click="optionSelect(index)"
+      >
         <i class="select-icon"></i>
         <p class="answer-text">选项1</p>
         <i class="assert-icon"></i>
       </li>
-      <li class="answer-option-item select">
+      <!-- <li class="answer-option-item select">
         <i class="select-icon"></i>
         <p class="answer-text">选项1</p>
         <i class="assert-icon"></i>
-      </li>
+      </li> -->
       <!-- <li class="answer-option-item wrong">
         <i class="select-icon"></i>
         <p class="answer-text">选项1</p>
         <i class="assert-icon"></i>
       </li> -->
-      <li class="answer-option-item correct">
+      <!-- <li class="answer-option-item correct">
         <i class="select-icon"></i>
         <p class="answer-text">选项1</p>
         <i class="assert-icon"></i>
@@ -34,13 +40,42 @@
         <i class="select-icon"></i>
         <p class="answer-text">选项1</p>
         <i class="assert-icon"></i>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
-const emit = defineEmits([''])
+import { devLog } from '@/utils/devLog'
+
+interface Props {
+  anwser: number[]
+  userAnwser: number[]
+  options: { content: string }[]
+  title: string
+  assert?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  assert: false
+})
+const emit = defineEmits(['select'])
+function optionSelect(index: number) {
+  devLog(['click option: ', index])
+  emit('select', index)
+}
+watch(
+  () => props.assert,
+  () => {}
+)
+
+function setItemState(index: number) {
+  if (props.anwser[index] === props.userAnwser[index] && props.assert)
+    return ['select', 'correct']
+  if (props.anwser[index] !== props.userAnwser[index] && props.assert)
+    return ['select', 'wrong']
+  if (props.userAnwser[index] === 1) return ['select']
+  if (props.userAnwser[index] === 0) return ['']
+}
 </script>
 
 <style>

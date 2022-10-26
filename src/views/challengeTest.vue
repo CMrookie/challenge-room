@@ -1,14 +1,27 @@
 <template>
   <main class="w-full h-full bg-main-bg flex flex-col items-center relative">
     <div class="container-wrap">
-      <section class="container">
-        <div class="time">60s</div>
-        <div class="progress">12/20</div>
-        <div class="title">視頻答題</div>
-        <div>
-          <ChallengeQuestion></ChallengeQuestion>
-        </div>
-      </section>
+      <transition name="">
+        <section class="container">
+          <div class="time">60s</div>
+          <div class="progress">12/20</div>
+          <div class="title">視頻答題</div>
+          <div>
+            <ChallengeQuestion
+              :anwser="[0, 0, 0, 0]"
+              :user-anwser="[0, 0, 0, 0]"
+              :title="'在影片開頭提及到一位身材壯健，皮膚黝黑，神情嚴肅的官員，請'"
+              :options="[
+                { content: 'aaa' },
+                { content: 'aaa' },
+                { content: 'aaa' },
+                { content: 'aaa' }
+              ]"
+              @select="handleSelect"
+            ></ChallengeQuestion>
+          </div>
+        </section>
+      </transition>
     </div>
 
     <footer class="footer">
@@ -35,11 +48,42 @@ import { devLog } from '@/utils/devLog'
 import { getQuestions } from '@/api'
 import { useAppStore } from '@/store/app'
 
+/**
+ * @params type 0 判断
+ * @params type 1 单选
+ * @params type 2 多选
+ */
+
 const store = useAppStore()
+const anwserList = ref<number[][]>([])
+const userAnwserList = ref<number[][]>([])
+function generateAnwser(questionOptions: { default: boolean }[]) {
+  return questionOptions.map((option: { default: boolean }) => {
+    if (option.default === false) return 0
+    return 1
+  })
+}
+function generateAnwserList(questionsList: { options: any }[]) {
+  return questionsList.map((item: { options: any }) => {
+    return generateAnwser(item.options)
+  })
+}
+function initUserAnwser(questionList: { options: unknown[] }[]) {
+  return questionList.map((item: { options: unknown[] }) => {
+    return item.options.map((_option) => 0)
+  })
+}
 async function initTest() {
   try {
-    let res = getQuestions({ code: store.qrCode })
+    let res: any = await getQuestions({ code: store.qrCode })
     devLog(['res: ', res])
+    if (res.code === 200) {
+      store.questionsData = res.data
+      devLog(['anwser: ', generateAnwserList(res.data.question)])
+      devLog(['userAnwser: ', initUserAnwser(res.data.question)])
+      anwserList.value = generateAnwserList(res.data.question)
+      userAnwserList.value = generateAnwserList(res.data.question)
+    }
   } catch (err: { message: string }) {
     Snackbar.warning(err.message)
   }
@@ -54,10 +98,10 @@ function handleNextClick() {
   router.push({ path: '/archives' })
 }
 
-const a = ref('a')
+// const a = ref('a')
 
 function handleClick() {
-  a.value = 'b'
+  // a.value = 'b'
 }
 const second = ref<number>(0)
 const timer = ref<number>()
@@ -73,7 +117,6 @@ function countdown(fn: CallableFunction) {
 }
 
 function countdownCb() {
-  Snackbar(second.value)
   devLog([second.value])
   if (second.value < 3) {
     clearTimeout(timer.value)
@@ -84,6 +127,10 @@ onMounted(() => {
   countdown(countdownCb)
   clearTimeout(timer.value)
 })
+
+function handleSelect(index: number) {
+  console.log('select: ', index)
+}
 </script>
 
 <style scoped>

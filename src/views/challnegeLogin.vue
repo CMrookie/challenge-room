@@ -49,8 +49,10 @@ const tipPassword = ref<string>('')
 async function handleLogin() {
   if (!checkForm()) return
   try {
-    let res = await login(form)
-    if (res.data.code === 200) {
+    let res: any = await login(form)
+    devLog(['login res: ', res])
+    if (res.code === 200) {
+      localStorage.setItem('token', res.data.token)
       saveUser()
       return router.push({ path: '/scan' })
     }
@@ -85,6 +87,9 @@ function saveUser() {
 function getUser() {
   return JSON.parse(localStorage.getItem('form') ?? '{}')
 }
+function clearToken() {
+  localStorage.removeItem('token')
+}
 onMounted(() => {
   //   checkToken()
   //     .then((res: unknown) => {
@@ -94,6 +99,7 @@ onMounted(() => {
   //       devLog(['err: ', err])
   //     })
   let store = getUser()
+  clearToken()
   form.password = store?.password ?? ''
   form.username = store?.username ?? ''
 })

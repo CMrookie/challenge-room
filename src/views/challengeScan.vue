@@ -3,7 +3,7 @@
     <!-- <ChallengeQRScan :definition="true"></ChallengeQRScan> -->
     <div class="content">
       <qrcode-drop-zone v-if="isScan" @decode="onDecode">
-        <qrcode-stream camera="rear" @decode="onDecode"  />
+        <qrcode-stream camera="rear" @decode="onDecode" />
       </qrcode-drop-zone>
       <p v-if="!isScan">
         中國歷史挑戰室：
@@ -73,12 +73,11 @@ async function onInit(promise: any) {
     } else {
       _error.value = `ERROR: Camera error (${error.name})`
     }
-    Snackbar.warning(
-      {
-         content: "此設備可能無法正常掃碼，如果無法正常掃碼請更換其他設備進行挑戰!!",
-         duration: 1000
-      }
-    )
+    Snackbar.warning({
+      content:
+        '此設備可能無法正常掃碼，如果無法正常掃碼請更換其他設備進行挑戰!!',
+      duration: 1000
+    })
   }
 }
 const store = useAppStore()
