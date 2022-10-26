@@ -17,5 +17,6 @@ declare module '@vue/runtime-core' {
     LoadProgress: typeof import('./src/components/loadProgress.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VarBackTop: typeof import('@varlet/ui')['_BackTopComponent']
   }
 }

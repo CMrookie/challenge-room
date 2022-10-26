@@ -16,14 +16,16 @@
                 <p class="text-x text-black">題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx</p>
               </div>
             </section>
+            <var-back-top :duration="300" />
         </div>
       </ul>
+
   </main>
 </template>
 
 <script lang="ts" setup>
 import ChallengeQuestion from '../components/challengeQuestion.vue'
-
+const router = useRouter()
 
 const a = ref('a')
 
