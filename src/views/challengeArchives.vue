@@ -35,7 +35,7 @@
               <span>2022年11月20日</span>
             </div>
           </div>
-          <div class="btn-inquire">查詢</div>
+          <div class="btn-inquire" @click="viewAnswer()">查詢</div>
         </li>
       </template>
     </ul>
@@ -55,6 +55,14 @@
 
 <script lang="ts" setup>
 import ChallengeQuit from '../components/challengeQuit.vue'
+
+const router = useRouter()
+
+//go to view the Answer
+function viewAnswer(){
+  router.push({path:'/Answer'})
+}
+
 </script>
 
 <style scoped>
