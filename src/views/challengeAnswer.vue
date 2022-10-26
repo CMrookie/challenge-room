@@ -1,7 +1,7 @@
 <template>
   <main class="w-full h-full bg-main-bg">
       <ul class="challenge-list w-full h-full">
-        <h3 class="btn-back"></h3>
+        <h3 class="btn-back" @click="back"></h3>
         <div class="container-wrap">
           <h2 class="header-title">我的答題</h2>
             <section class="container" v-for="i in 15" :key="i">
