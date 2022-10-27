@@ -21,15 +21,21 @@
       <div>結束時間</div>
     </div>
     <div class="flex justify-center">
-      <div class="btn-paper">你的試卷</div>
-      <div class="btn-comfirm">確定</div>
+      <div class="btn-paper" @click="viewAnswer">你的試卷</div>
+      <div class="btn-comfirm" >確定</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+const router = useRouter()
 const starNum = ref<number>(0)
 starNum.value = 3
+
+function viewAnswer(){
+  // is_Inquiry.value = true
+  router.push({path:'/Answer'})
+}
 </script>
 
 <style>

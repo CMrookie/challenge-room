@@ -8,16 +8,16 @@
       </div>
       <div class="user-info-rigth">
         <div class="name-wrap">
-          <span class="name">这是名字</span>
+          <span class="name">{{ArchivesName}}</span>
         </div>
         <div class="flex justify-between">
           <div class="flex flex-col">
-            <span>班级：xx</span>
-            <span>学号：xx</span>
+            <span>班级：{{ArchivesGradeName}}</span>
+            <span>学号：{{ArchivesUserName}}</span>
           </div>
           <div class="flex flex-col">
-            <span>就读学校：xx XXXXXXXXXXXXXX说</span>
-            <span>ID：xx</span>
+            <span>学校：{{ArchivesSchoolName}}</span>
+            <span>ID：{{ArchivesID}}</span>
           </div>
         </div>
       </div>
@@ -40,6 +40,9 @@
       </template>
     </ul>
     <ChallengeQuit></ChallengeQuit>
+    <ChallengeMask v-if=is_Inquiry>
+      <ChallengeScroeBoard></ChallengeScroeBoard>
+    </ChallengeMask>
     <footer class="footer">
       <div class="bg-white border-r active:bg-slate-200" @click="toScan">
         <i class="icon bg-test-black"></i>
@@ -56,22 +59,55 @@
 <script lang="ts" setup>
 import { initCustomFormatter } from 'vue';
 import ChallengeQuit from '../components/challengeQuit.vue'
+import { getStudentsInfo } from '@/api'
 
 const router = useRouter()
+//
+const is_Inquiry = ref<boolean>(false)
+//ArchivesStudentInfo
+const ArchivesName = ref<string>('')
+const ArchivesUserName = ref<string>('')
+const  ArchivesGradeName = ref<string>('')
+const ArchivesID = ref<string>('')
+const ArchivesSchoolName = ref<string>('')
+//ArchivesTestInfo
+const TestRoomName = ref<string>('')
+const QuestionsNumber = ref<string>('')
+const TestAchievement = ref<string>('')
+const TestTime = ref<string>('')
+
 
 //生命周期
-onMounted(()=>{
+ onMounted(()=>{
   //
-  
+  intiStudentInfo()
 })
 
 //go to view the Answer
 function viewAnswer(){
-  router.push({path:'/Answer'})
+  is_Inquiry.value = true
+  //router.push({path:'/Answer'})
 }
 
 function toScan(){
+  
   router.push({path:'/Scan'})
+}
+
+async function intiStudentInfo(){
+
+  let res: any = await getStudentsInfo()
+  //console.log('>>>>res>>>>intiStudentInfo',res)
+  //
+  if (res.code === 200) {
+    ArchivesName.value = res.data.truename
+    ArchivesUserName.value = res.data.username
+    ArchivesGradeName.value = res.data.grade.name
+    ArchivesSchoolName.value = res.data.school
+    ArchivesID.value =res.data.id
+  }else{
+
+  }
 }
 
 </script>

@@ -29,3 +29,11 @@ export function getQuestions(params: GetQuestionsParams) {
     params
   })
 }
+
+//get Students Userinfo
+export function getStudentsInfo() {
+  return request({
+    url: 'student/get_user',
+    method: 'get',
+  })
+}
