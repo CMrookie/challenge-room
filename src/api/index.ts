@@ -24,7 +24,7 @@ interface GetQuestionsParams {
 }
 export function getQuestions(params: GetQuestionsParams) {
   return request({
-    url: 'student/get_item?code=',
+    url: 'student/get_item',
     method: 'get',
     params
   })

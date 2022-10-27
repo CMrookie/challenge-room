@@ -11,12 +11,14 @@ export const useAppStore = defineStore('app', () => {
   // const count = ref<number>(0)
   const qrCode = ref<string>('')
   const questionsData = ref<any>({})
+  // const qustionList = ref<any[]>([])
 
+  const questionList = computed(() => questionsData.value.question)
   // const fullName = computed(() => `${firstName.value} ${lastName.value}`)
 
   // function increment() {
   //   count.value++
   // }
 
-  return { qrCode, questionsData }
+  return { qrCode, questionsData, questionList }
 })

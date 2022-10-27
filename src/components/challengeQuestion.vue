@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="question">
-      这是题目，现在没有，所以随便写一些这是题目，现在没有，所以随便写一些这是题目，现在没有，所以随便写一些
+      {{ question }}
     </p>
     <slot></slot>
     <ul class="answer-oprions">
@@ -13,7 +13,7 @@
         @click="optionSelect(index)"
       >
         <i class="select-icon"></i>
-        <p class="answer-text">选项1</p>
+        <p class="answer-text">{{ option.content }}</p>
         <i class="assert-icon"></i>
       </li>
       <!-- <li class="answer-option-item select">
@@ -49,10 +49,10 @@
 import { devLog } from '@/utils/devLog'
 
 interface Props {
-  anwser: number[]
-  userAnwser: number[]
+  answer: number[]
+  userAnswer: number[]
   options: { content: string }[]
-  title: string
+  question: string
   assert?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -65,16 +65,42 @@ function optionSelect(index: number) {
 }
 watch(
   () => props.assert,
-  () => {}
+  () => {
+    props.answer.forEach((item, index) => {
+      setItemState(index)
+    })
+  }
+)
+watch(
+  () => props.userAnswer,
+  () => {
+    props.answer.forEach((item, index) => {
+      setItemState(index)
+    })
+  }
 )
 
 function setItemState(index: number) {
-  if (props.anwser[index] === props.userAnwser[index] && props.assert)
-    return ['select', 'correct']
-  if (props.anwser[index] !== props.userAnwser[index] && props.assert)
-    return ['select', 'wrong']
-  if (props.userAnwser[index] === 1) return ['select']
-  if (props.userAnwser[index] === 0) return ['']
+  if (props.assert) {
+    if (
+      props.answer[index] === props.userAnswer[index] &&
+      props.answer[index] === 1
+    )
+      return ['select', 'correct']
+    if (
+      props.answer[index] !== props.userAnswer[index] &&
+      props.answer[index] === 1
+    )
+      return ['correct']
+    if (
+      props.answer[index] !== props.userAnswer[index] &&
+      props.answer[index] === 0
+    )
+      return ['select', 'wrong']
+    // if
+  }
+  if (props.userAnswer[index] === 1) return ['select']
+  if (props.userAnswer[index] === 0) return ['']
 }
 </script>
 

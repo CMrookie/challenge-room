@@ -3,14 +3,15 @@
     <div class="container-wrap">
       <transition name="">
         <section class="container">
-          <div class="time">60s</div>
+          <div class="time">50</div>
           <div class="progress">12/20</div>
           <div class="title">視頻答題</div>
           <div>
             <ChallengeQuestion
-              :anwser="[0, 0, 0, 0]"
-              :user-anwser="[0, 0, 0, 0]"
-              :title="'在影片開頭提及到一位身材壯健，皮膚黝黑，神情嚴肅的官員，請'"
+              :assert="isAssert"
+              :answer="[0, 0, 1, 0]"
+              :user-answer="userAnswer"
+              question="在影片開頭提及到一位身材壯健，皮膚黝黑，神情嚴肅的官員，請"
               :options="[
                 { content: 'aaa' },
                 { content: 'aaa' },
@@ -47,56 +48,45 @@ import { Snackbar } from '@varlet/ui'
 import { devLog } from '@/utils/devLog'
 import { getQuestions } from '@/api'
 import { useAppStore } from '@/store/app'
+import { useGenerateAnswer } from '@/utils/usegenerateanswer'
 
 /**
  * @params type 0 判断
  * @params type 1 单选
  * @params type 2 多选
  */
-
+const { generateAnswerList, initUserAnswer } = useGenerateAnswer()
 const store = useAppStore()
+const questionList = store.questionList
+console.log('questionList from store : ', questionList)
 const anwserList = ref<number[][]>([])
-const userAnwserList = ref<number[][]>([])
-function generateAnwser(questionOptions: { default: boolean }[]) {
-  return questionOptions.map((option: { default: boolean }) => {
-    if (option.default === false) return 0
-    return 1
-  })
-}
-function generateAnwserList(questionsList: { options: any }[]) {
-  return questionsList.map((item: { options: any }) => {
-    return generateAnwser(item.options)
-  })
-}
-function initUserAnwser(questionList: { options: unknown[] }[]) {
-  return questionList.map((item: { options: unknown[] }) => {
-    return item.options.map((_option) => 0)
-  })
-}
+const userAnswerList = ref<number[][]>([])
+
 async function initTest() {
   try {
     let res: any = await getQuestions({ code: store.qrCode })
     devLog(['res: ', res])
     if (res.code === 200) {
       store.questionsData = res.data
-      devLog(['anwser: ', generateAnwserList(res.data.question)])
-      devLog(['userAnwser: ', initUserAnwser(res.data.question)])
-      anwserList.value = generateAnwserList(res.data.question)
-      userAnwserList.value = generateAnwserList(res.data.question)
+      devLog(['anwser: ', generateAnswerList(res.data.question)])
+      devLog(['userAnwser: ', initUserAnswer(res.data.question)])
+      anwserList.value = generateAnswerList(res.data.question)
+      userAnswerList.value = initUserAnswer(res.data.question)
     }
-  } catch (err: { message: string }) {
-    Snackbar.warning(err.message)
+  } catch (err: any) {
+    // Snackbar.warning(err.message)
   }
 }
-onMounted(() => {
-  initTest()
+onMounted(async () => {
+  await initTest()
+  console.log('questionList: ', store.questionList)
 })
 
 const router = useRouter()
 
-function handleNextClick() {
-  router.push({ path: '/archives' })
-}
+// function handleNextClick() {
+//   router.push({ path: '/archives' })
+// }
 
 // const a = ref('a')
 
@@ -128,8 +118,30 @@ onMounted(() => {
   clearTimeout(timer.value)
 })
 
+const userAnswer = ref<number[]>([])
+const isAssert = ref<boolean>(false)
+userAnswer.value = [0, 0, 0, 0]
 function handleSelect(index: number) {
   console.log('select: ', index)
+  userAnswer.value[index] = 1
+  isAssert.value = !isAssert.value
+}
+
+const questionNum = ref<number>(0)
+function checkAnswerIsSelect(questionNum: number): boolean {
+  let selected: number[] = userAnswerList.value[questionNum].filter(
+    (item: number) => item === 1
+  )
+  return selected.length >= 1
+}
+function handleNextClick() {
+  console.log('useranswer: ', userAnswerList.value[questionNum.value])
+  console.log('isselect: ', checkAnswerIsSelect(questionNum.value))
+  if (checkAnswerIsSelect(questionNum.value)) {
+    isAssert.value = true
+  } else {
+    return Snackbar.warning('請先完成當前題目再進行下一題。')
+  }
 }
 </script>
 
