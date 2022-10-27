@@ -24,7 +24,7 @@
         <i class="icon bg-test-white"></i>
         答題
       </div>
-      <div class="bg-white border-l active:bg-slate-200">
+      <div class="bg-white border-l active:bg-slate-200" @click="toArchives">
         <i class="icon bg-paper-black"></i>
         個人檔案
       </div>
@@ -49,6 +49,11 @@ function handleScanClick() {
 function handleQuit() {
   devLog(['quit'])
 }
+
+function toArchives(){
+  router.push({path:'/Archives'})
+}
+
 
 const _error = ref()
 async function onInit(promise: any) {

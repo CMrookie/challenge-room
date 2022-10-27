@@ -41,7 +41,7 @@
     </ul>
     <ChallengeQuit></ChallengeQuit>
     <footer class="footer">
-      <div class="bg-white border-r active:bg-slate-200">
+      <div class="bg-white border-r active:bg-slate-200" @click="toScan">
         <i class="icon bg-test-black"></i>
         答題
       </div>
@@ -54,13 +54,24 @@
 </template>
 
 <script lang="ts" setup>
+import { initCustomFormatter } from 'vue';
 import ChallengeQuit from '../components/challengeQuit.vue'
 
 const router = useRouter()
 
+//生命周期
+onMounted(()=>{
+  //
+  
+})
+
 //go to view the Answer
 function viewAnswer(){
   router.push({path:'/Answer'})
+}
+
+function toScan(){
+  router.push({path:'/Scan'})
 }
 
 </script>
