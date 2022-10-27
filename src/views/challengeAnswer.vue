@@ -9,14 +9,24 @@
               <div class="progress">{{i+"/20"}}</div>
               <div class="title">視頻答題</div>
               <div>
-                <ChallengeQuestion></ChallengeQuestion>
+                <ChallengeQuestion
+              :anwser="[0, 0, 0, 0]"
+              :user-anwser="[0, 0, 0, 0]"
+              :title="'在影片開頭提及到一位身材壯健，皮膚黝黑，神情嚴肅的官員，請'"
+              :options="[
+                { content: 'aaa' },
+                { content: 'aaa' },
+                { content: 'aaa' },
+                { content: 'aaa' }
+              ]"
+            ></ChallengeQuestion>
               </div>
               <div class="analysis-box">
                 解析:
                 <p class="text-x text-black">題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx</p>
               </div>
             </section>
-            <var-back-top :duration="300" />
+
         </div>
       </ul>
 
