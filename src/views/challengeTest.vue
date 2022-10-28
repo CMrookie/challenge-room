@@ -57,7 +57,7 @@ console.log('questionList from store : ', questionList)
 const isAssert = ref<boolean>(false)
 const answerList = store.answerList // toRef(store, 'answerList') //ref<number[][]>([])
 const userAnswerList = store.userAnswerList // toRef(store, 'userAnswerList') //ref<number[][]>([])
-const { singleSelect, mutipleSelect } = useTesting()
+const { singleSelect, mutipleSelect, assertAnswer, calcScore } = useTesting()
 const { timer, timeCountdown, clearCountdown, questionTime, feebackTime } =
   useCountdown()
 
@@ -68,7 +68,8 @@ function questionCountdown() {
     feebackTime.value = 1
     nextTick(() => {
       timeCountdown(feebackCountdown)
-      questionNum.value++
+      showFeeback()
+      // questionNum.value++
     })
   }
   // TODO
@@ -76,9 +77,18 @@ function questionCountdown() {
 
 function feebackCountdown() {
   feebackTime.value--
-  if (feebackTime.value <= 0) return clearCountdown()
+  if (feebackTime.value <= 0) {
+    clearCountdown()
+    // finish test
+    if (questionNum.value + 1 === questionList.length) {
+      // TODO
+      // show score board
+    }
+    // nestQuestion
+  }
   // TODO
 }
+function showFeeback() {}
 
 async function initTest() {
   questionTime.value = 10

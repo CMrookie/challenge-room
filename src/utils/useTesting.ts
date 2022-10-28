@@ -12,5 +12,20 @@ export function useTesting() {
       return 0
     })
   }
-  return { mutipleSelect, singleSelect }
+  function assertAnswer(answerList: (0 | 1)[], userAnswerList: (0 | 1)[]) {
+    return answerList.filter((item, index) => item === userAnswerList[index])
+      .length > 0
+      ? false
+      : true
+  }
+  function calcScore(questionList: object[]) {
+    let score = 0
+    questionList.forEach((item: any) => {
+      if (item.isCorrect) {
+        score += item.grade
+      }
+    })
+    return score
+  }
+  return { mutipleSelect, singleSelect, assertAnswer, calcScore }
 }
