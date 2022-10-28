@@ -4,7 +4,9 @@
       <transition name="">
         <section class="container">
           <div class="time">{{ questionTime }}</div>
-          <div class="progress">12/20</div>
+          <div class="progress">
+            {{ questionNum + 1 }}/{{ questionList.length }}
+          </div>
           <div class="title">視頻答題</div>
           <div>
             <ChallengeQuestion
@@ -23,12 +25,12 @@
     <footer class="footer">
       <div class="next-btn" @click="handleNextClick">下一題</div>
     </footer>
-    <ChallengeMask v-if="false">
+    <ChallengeMask v-if="isFinish">
       <ChallengeScroeBoard></ChallengeScroeBoard>
     </ChallengeMask>
-    <ChallengeMask v-if="false" @click="handleClick">
+    <ChallengeMask v-if="isFeeback" @click="handleClick">
       <div class="text-white">
-        <ChallengeFeeback :type="'cross'"></ChallengeFeeback>
+        <ChallengeFeeback :type="feebackType"></ChallengeFeeback>
       </div>
     </ChallengeMask>
   </main>
@@ -55,24 +57,31 @@ const questionNum = ref<number>(0)
 const questionList = store.questionList
 console.log('questionList from store : ', questionList)
 const isAssert = ref<boolean>(false)
+const feebackType = ref<string>('')
 const answerList = store.answerList // toRef(store, 'answerList') //ref<number[][]>([])
 const userAnswerList = store.userAnswerList // toRef(store, 'userAnswerList') //ref<number[][]>([])
-const { singleSelect, mutipleSelect, assertAnswer, calcScore } = useTesting()
-const { timer, timeCountdown, clearCountdown, questionTime, feebackTime } =
-  useCountdown()
+const {
+  singleSelect,
+  mutipleSelect,
+  assertAnswer,
+  calcScore,
+  isFinish,
+  isFeeback
+} = useTesting()
+const {
+  timer,
+  timeCountdown,
+  clearCountdown,
+  questionTime,
+  feebackTime,
+  stayAnswerTime
+} = useCountdown()
 
 function questionCountdown() {
   questionTime.value--
   if (questionTime.value <= 0) {
-    clearCountdown()
-    feebackTime.value = 1
-    nextTick(() => {
-      timeCountdown(feebackCountdown)
-      showFeeback()
-      // questionNum.value++
-    })
+    nextQuestion()
   }
-  // TODO
 }
 
 function feebackCountdown() {
@@ -82,13 +91,40 @@ function feebackCountdown() {
     // finish test
     if (questionNum.value + 1 === questionList.length) {
       // TODO
-      // show score board
+      // show score board c
     }
     // nestQuestion
+    isAssert.value = false
+    questionNum.value++
+    isFeeback.value = false
+    questionTime.value = questionList[questionNum.value].time
+    timeCountdown(questionCountdown)
   }
-  // TODO
 }
+
 function showFeeback() {}
+
+function showScoreBoard() {}
+
+function nextQuestion() {
+  clearCountdown()
+  // feebackTime.value = 1
+  isAssert.value = true
+  let answerAssert = assertAnswer(
+    answerList[questionNum.value],
+    userAnswerList[questionNum.value]
+  )
+  answerAssert ? (feebackType.value = 'correct') : (feebackType.value = 'cross')
+  questionList[questionNum.value]['isCorrect'] = answerAssert
+  isFeeback.value = true
+  nextTick(() => {
+    // timeCountdown(feebackCountdown)
+    showFeeback()
+    feebackTime.value = 2
+    timeCountdown(feebackCountdown)
+    // questionNum.value++
+  })
+}
 
 async function initTest() {
   questionTime.value = 10
@@ -105,14 +141,10 @@ const router = useRouter()
 //   router.push({ path: '/archives' })
 // }
 
-// const a = ref('a')
-
 function handleClick() {
   // a.value = 'b'
 }
 
-const userAnswer = ref<number[]>([])
-userAnswer.value = [0, 0, 0, 0]
 function handleSelect(index: number) {
   console.log('select: ', index)
   if (
@@ -130,21 +162,20 @@ function handleSelect(index: number) {
       index
     )
   }
-  // userAnswer.value[index] = 1
-  // isAssert.value = !isAssert.value
 }
 
 function checkAnswerIsSelect(questionNum: number): boolean {
-  let selected: number[] = userAnswerList.value[questionNum].filter(
+  let selected: number[] = userAnswerList[questionNum].filter(
     (item: number) => item === 1
   )
   return selected.length >= 1
 }
 function handleNextClick() {
-  console.log('useranswer: ', userAnswerList.value[questionNum.value])
-  console.log('isselect: ', checkAnswerIsSelect(questionNum.value))
+  // console.log('useranswer: ', userAnswerList[questionNum.value])
+  // console.log('isselect: ', checkAnswerIsSelect(questionNum.value))
   if (checkAnswerIsSelect(questionNum.value)) {
-    isAssert.value = true
+    // isAssert.value = true
+    nextQuestion()
   } else {
     return Snackbar.warning('請先完成當前題目再進行下一題。')
   }

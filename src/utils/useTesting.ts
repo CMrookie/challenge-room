@@ -1,4 +1,6 @@
 export function useTesting() {
+  const isFinish = ref<boolean>(false)
+  const isFeeback = ref<boolean>(false)
   function mutipleSelect(answerList: (0 | 1)[], select: number): (0 | 1)[] {
     const _answerList: (0 | 1)[] = answerList
     _answerList[select] === 1
@@ -13,7 +15,11 @@ export function useTesting() {
     })
   }
   function assertAnswer(answerList: (0 | 1)[], userAnswerList: (0 | 1)[]) {
-    return answerList.filter((item, index) => item === userAnswerList[index])
+    // console.log(
+    //   'assertAnswerLis: ',
+    //   answerList.filter((item, index) => item !== userAnswerList[index])
+    // )
+    return answerList.filter((item, index) => item !== userAnswerList[index])
       .length > 0
       ? false
       : true
@@ -27,5 +33,12 @@ export function useTesting() {
     })
     return score
   }
-  return { mutipleSelect, singleSelect, assertAnswer, calcScore }
+  return {
+    isFinish,
+    isFeeback,
+    mutipleSelect,
+    singleSelect,
+    assertAnswer,
+    calcScore
+  }
 }
