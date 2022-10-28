@@ -3,21 +3,16 @@
     <div class="container-wrap">
       <transition name="">
         <section class="container">
-          <div class="time">50</div>
+          <div class="time">{{ questionTime }}</div>
           <div class="progress">12/20</div>
           <div class="title">視頻答題</div>
           <div>
             <ChallengeQuestion
               :assert="isAssert"
-              :answer="[0, 0, 1, 0]"
-              :user-answer="userAnswer"
-              question="在影片開頭提及到一位身材壯健，皮膚黝黑，神情嚴肅的官員，請"
-              :options="[
-                { content: 'aaa' },
-                { content: 'aaa' },
-                { content: 'aaa' },
-                { content: 'aaa' }
-              ]"
+              :answer="answerList[questionNum]"
+              :user-answer="userAnswerList[questionNum]"
+              :question="questionList[questionNum].title"
+              :options="questionList[questionNum].options"
               @select="handleSelect"
             ></ChallengeQuestion>
           </div>
@@ -46,36 +41,49 @@ import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
 import { Snackbar } from '@varlet/ui'
 import { devLog } from '@/utils/devLog'
-import { getQuestions } from '@/api'
 import { useAppStore } from '@/store/app'
-import { useGenerateAnswer } from '@/utils/usegenerateanswer'
+import { useCountdown } from '@/utils/useCountdown'
+import { useTesting } from '@/utils/useTesting'
 
 /**
  * @params type 0 判断
  * @params type 1 单选
  * @params type 2 多选
  */
-const { generateAnswerList, initUserAnswer } = useGenerateAnswer()
 const store = useAppStore()
+const questionNum = ref<number>(0)
 const questionList = store.questionList
 console.log('questionList from store : ', questionList)
-const anwserList = ref<number[][]>([])
-const userAnswerList = ref<number[][]>([])
+const isAssert = ref<boolean>(false)
+const answerList = store.answerList // toRef(store, 'answerList') //ref<number[][]>([])
+const userAnswerList = store.userAnswerList // toRef(store, 'userAnswerList') //ref<number[][]>([])
+const { singleSelect, mutipleSelect } = useTesting()
+const { timer, timeCountdown, clearCountdown, questionTime, feebackTime } =
+  useCountdown()
+
+function questionCountdown() {
+  questionTime.value--
+  if (questionTime.value <= 0) {
+    clearCountdown()
+    feebackTime.value = 1
+    nextTick(() => {
+      timeCountdown(feebackCountdown)
+      questionNum.value++
+    })
+  }
+  // TODO
+}
+
+function feebackCountdown() {
+  feebackTime.value--
+  if (feebackTime.value <= 0) return clearCountdown()
+  // TODO
+}
 
 async function initTest() {
-  try {
-    let res: any = await getQuestions({ code: store.qrCode })
-    devLog(['res: ', res])
-    if (res.code === 200) {
-      store.questionsData = res.data
-      devLog(['anwser: ', generateAnswerList(res.data.question)])
-      devLog(['userAnwser: ', initUserAnswer(res.data.question)])
-      anwserList.value = generateAnswerList(res.data.question)
-      userAnswerList.value = initUserAnswer(res.data.question)
-    }
-  } catch (err: any) {
-    // Snackbar.warning(err.message)
-  }
+  questionTime.value = 10
+  clearCountdown()
+  timeCountdown(questionCountdown)
 }
 onMounted(async () => {
   await initTest()
@@ -83,7 +91,6 @@ onMounted(async () => {
 })
 
 const router = useRouter()
-
 // function handleNextClick() {
 //   router.push({ path: '/archives' })
 // }
@@ -93,41 +100,30 @@ const router = useRouter()
 function handleClick() {
   // a.value = 'b'
 }
-const second = ref<number>(0)
-const timer = ref<number>()
-function countdown(fn: CallableFunction) {
-  second.value--
-  fn()
-  function timeoutFn() {
-    if (second.value > 0) {
-      countdown(fn)
-    }
-  }
-  timer.value = window.setTimeout(timeoutFn, 1000)
-}
-
-function countdownCb() {
-  devLog([second.value])
-  if (second.value < 3) {
-    clearTimeout(timer.value)
-  }
-}
-onMounted(() => {
-  second.value = 10
-  countdown(countdownCb)
-  clearTimeout(timer.value)
-})
 
 const userAnswer = ref<number[]>([])
-const isAssert = ref<boolean>(false)
 userAnswer.value = [0, 0, 0, 0]
 function handleSelect(index: number) {
   console.log('select: ', index)
-  userAnswer.value[index] = 1
-  isAssert.value = !isAssert.value
+  if (
+    questionList[questionNum.value].type === 0 ||
+    questionList[questionNum.value].type === 1
+  ) {
+    userAnswerList[questionNum.value] = singleSelect(
+      userAnswerList[questionNum.value],
+      index
+    )
+  }
+  if (questionList[questionNum.value] === 2) {
+    userAnswerList[questionNum.value] = mutipleSelect(
+      userAnswerList[questionNum.value],
+      index
+    )
+  }
+  // userAnswer.value[index] = 1
+  // isAssert.value = !isAssert.value
 }
 
-const questionNum = ref<number>(0)
 function checkAnswerIsSelect(questionNum: number): boolean {
   let selected: number[] = userAnswerList.value[questionNum].filter(
     (item: number) => item === 1

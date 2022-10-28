@@ -5,12 +5,12 @@ export function useGenerateAnswer() {
       return 1
     })
   }
-  function generateAnswerList(questionsList: { options: any }[]) {
-    return questionsList.map((item: { options: any }) => {
+  function generateAnswerList(questionsList: { options: [] }[]): (0 | 1)[][] {
+    return questionsList.map((item: { options: [] }) => {
       return generateAnswer(item.options)
     })
   }
-  function initUserAnswer(questionList: { options: unknown[] }[]) {
+  function initUserAnswer(questionList: { options: unknown[] }[]): (0 | 1)[][] {
     return questionList.map((item: { options: unknown[] }) => {
       return item.options.map((_option) => 0)
     })

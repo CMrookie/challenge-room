@@ -1,12 +1,12 @@
 <template>
   <div>
     <p class="question">
-      {{ question }}
+      {{ question ?? '' }}
     </p>
     <slot></slot>
     <ul class="answer-oprions">
       <li
-        v-for="(option, index) in options"
+        v-for="(option, index) in options ?? []"
         :key="index"
         class="answer-option-item"
         :class="setItemState(index)"

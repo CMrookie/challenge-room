@@ -38,8 +38,13 @@ import ChallengeQuit from '../components/challengeQuit.vue'
 import { QrcodeStream, QrcodeDropZone } from 'qrcode-reader-vue3'
 import { Snackbar } from '@varlet/ui'
 import { useAppStore } from '@/store/app'
+import { useGetQuestion } from '@/utils/useGetQuestion'
+import { useGenerateAnswer } from '@/utils/usegenerateanswer'
+// import { getQuestions } from '@/api'
 
 const router = useRouter()
+
+const { saveQuestion2Store } = useGetQuestion()
 
 const isScan = ref<boolean>(false)
 function handleScanClick() {
@@ -50,10 +55,9 @@ function handleQuit() {
   devLog(['quit'])
 }
 
-function toArchives(){
-  router.push({path:'/Archives'})
+function toArchives() {
+  router.push({ path: '/Archives' })
 }
-
 
 const _error = ref()
 async function onInit(promise: any) {
@@ -85,10 +89,15 @@ async function onInit(promise: any) {
     })
   }
 }
+
 const store = useAppStore()
-function onDecode(code: string) {
+const { generateAnswerList, initUserAnswer } = useGenerateAnswer()
+async function onDecode(code: string) {
   console.log(code, 'store: ', store.qrCode)
   store.qrCode = code
+  await saveQuestion2Store(code)
+  store.answerList = generateAnswerList(store.questionList)
+  store.userAnswerList = initUserAnswer(store.questionList)
   router.push({ path: '/test' })
 }
 </script>

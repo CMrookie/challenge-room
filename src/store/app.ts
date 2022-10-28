@@ -11,7 +11,8 @@ export const useAppStore = defineStore('app', () => {
   // const count = ref<number>(0)
   const qrCode = ref<string>('')
   const questionsData = ref<any>({})
-  // const qustionList = ref<any[]>([])
+  const answerList = ref<(0 | 1)[][]>([])
+  const userAnswerList = ref<(0 | 1)[][]>([])
 
   const questionList = computed(() => questionsData.value.question)
   // const fullName = computed(() => `${firstName.value} ${lastName.value}`)
@@ -20,5 +21,5 @@ export const useAppStore = defineStore('app', () => {
   //   count.value++
   // }
 
-  return { qrCode, questionsData, questionList }
+  return { qrCode, questionsData, questionList, answerList, userAnswerList }
 })
