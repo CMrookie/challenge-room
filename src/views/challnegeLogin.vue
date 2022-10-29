@@ -125,7 +125,7 @@ onMounted(() => {
   font-size: 4vw;
 }
 .login-btn {
-  @apply border-black border-solid border-4 bg-btn text-center
+  @apply border-black border-solid border-2 bg-btn text-center
    mt-14 font-normal text-white rounded-md active:bg-btn-active select-none;
   width: 60vw;
   padding-top: 1vw;

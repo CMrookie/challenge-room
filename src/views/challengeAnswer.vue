@@ -1,8 +1,9 @@
 <template>
   <main class="w-full h-full bg-main-bg">
     <ul class="challenge-list w-full h-full">
-      <h3 class="btn-back" @click="back"></h3>
+      
       <div class="container-wrap">
+        <dev class="btn-back" @click="back"></dev>
         <h2 class="header-title">我的答題</h2>
         <section v-for="i in 15" :key="i" class="container">
           <!-- <div class="time">60s</div> -->
@@ -47,7 +48,7 @@ function back() {
 
 <style scoped>
 .container-wrap {
-  @apply flex items-center flex-col;
+  @apply flex items-center flex-col static;
   padding-top: 1vh;
 }
 .container {
@@ -94,8 +95,10 @@ function back() {
   height: 0px !important;
 }
 .btn-back {
-  @apply bg-back bg-cover bg-no-repeat relative left-10 top-10;
-  width: 7vw;
-  height: 7vw;
+  @apply bg-back bg-cover bg-no-repeat relative;
+  top: 3vw;
+  right: 40vw;
+  width: 10vw;
+  height: 10vw;
 }
 </style>
