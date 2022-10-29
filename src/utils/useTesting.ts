@@ -28,7 +28,7 @@ export function useTesting() {
     let score = 0
     questionList.forEach((item: any) => {
       if (item.isCorrect) {
-        score += item.grade
+        score += item.grade ?? 0
       }
     })
     return score

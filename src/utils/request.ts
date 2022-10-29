@@ -10,11 +10,11 @@ const request: AxiosInstance = axios.create({
   headers: { 'content-type': 'application/json' }
 })
 
-const token = localStorage.getItem('token')
-
 // 请求拦截
 request.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    const token = localStorage.getItem('token')
+    console.log('interceptors: ', token)
     if (config.headers && token) {
       config.headers['token'] = token
     }
