@@ -26,12 +26,21 @@
       <div class="next-btn" @click="handleNextClick">下一題</div>
     </footer>
     <transition name="fade">
-      <ChallengeMask v-show="isFinish">
-        <ChallengeScroeBoard></ChallengeScroeBoard>
+      <ChallengeMask v-if="isFinish">
+        <ChallengeScroeBoard
+          :accuracy="accuracy"
+          :designation="designation"
+          :score="score"
+          :stu-name="stuName"
+          :test-time="testTime"
+          :start-time="startTime"
+          :end-time="endTime"
+          :theme="theme"
+        ></ChallengeScroeBoard>
       </ChallengeMask>
     </transition>
     <transition name="fade">
-      <ChallengeMask v-show="isFeeback" @click="handleClick">
+      <ChallengeMask v-show="isFeeback">
         <div class="text-white">
           <ChallengeFeeback :type="feebackType"></ChallengeFeeback>
         </div>
@@ -50,6 +59,8 @@ import { devLog } from '@/utils/devLog'
 import { useAppStore } from '@/store/app'
 import { useCountdown } from '@/utils/useCountdown'
 import { useTesting } from '@/utils/useTesting'
+import { useScoreBoardInfo } from '@/utils/useScoreBoardInfo'
+import { getStudentsInfo } from '@/api'
 
 /**
  * @params type 0 判断
@@ -64,6 +75,16 @@ const feebackType = ref<string>('')
 const questionList = store.questionList ?? []
 const answerList = store.answerList ?? [] // toRef(store, 'answerList') //ref<number[][]>([])
 const userAnswerList = store.userAnswerList ?? [] // toRef(store, 'userAnswerList') //ref<number[][]>([])
+const {
+  score,
+  designation,
+  stuName,
+  theme,
+  testTime,
+  accuracy,
+  startTime,
+  endTime
+} = useScoreBoardInfo()
 const {
   singleSelect,
   mutipleSelect,
@@ -97,7 +118,7 @@ function feebackCountdown() {
     if (questionNum.value + 1 === questionList.length) {
       // TODO
       // show score board
-      devLog(['test score: ', calcScore(questionList)])
+      score.value = calcScore(questionList)
       clearCountdown()
       setUserAnswer2QuestionList()
       showScoreBoard()
@@ -119,6 +140,7 @@ function stayAnswer() {
   toggleIsFeeback()
   toggleIsAssert()
   toggleIsTestion()
+  isClickNextBtn.value = true
   setCountdownTime('feeback', 2)
   timeCountdown(feebackCountdown)
 }
@@ -126,6 +148,7 @@ function stayAnswer() {
 function showFeeback() {
   setUserAnswer2QuestionList()
   questionNum.value++
+  toggleIsClickNextBtn()
   toggleIsTestion()
   toggleIsFeeback()
   setCountdownTime('question', questionList[questionNum.value].time)
@@ -136,11 +159,13 @@ function showFeeback() {
 function showScoreBoard() {
   clearCountdown()
   toggleIsFeeback()
+  store.score = calcScore(questionList)
   isFinish.value = true
 }
 
 function nextQuestion() {
   clearCountdown()
+  toggleIsClickNextBtn()
   toggleIsAssert()
   let answerAssert = assertAnswer(
     answerList[questionNum.value],
@@ -194,17 +219,23 @@ async function initTest() {
 onMounted(async () => {
   await initTest()
   devLog(['questionList: ', store.questionList])
+  try {
+    let res: any = await getStudentsInfo()
+    if (res.code === 200) {
+      devLog(['getStudentInfo: ', res])
+      stuName.value = res.data.username
+      theme.value = res.data.school
+    } else {
+      Snackbar.error(res.msg)
+    }
+  } catch (error) {
+    Snackbar.error(error)
+  }
 })
 
-const router = useRouter()
-
-function handleClick() {
-  // a.value = 'b'
-}
-
+// event handler
 function handleSelect(index: number) {
-  devLog(['select: ', index])
-  devLog(['question type: ', questionList[questionNum.value].type])
+  if (isClickNextBtn.value) return
   if (
     questionList[questionNum.value].type === 0 ||
     questionList[questionNum.value].type === 1
@@ -228,11 +259,13 @@ function checkAnswerIsSelect(questionNum: number): boolean {
   )
   return selected.length >= 1
 }
+const isClickNextBtn = ref<boolean>(false)
+function toggleIsClickNextBtn() {
+  isClickNextBtn.value = !isClickNextBtn.value
+}
 function handleNextClick() {
-  // console.log('useranswer: ', userAnswerList[questionNum.value])
-  // console.log('isselect: ', checkAnswerIsSelect(questionNum.value))
+  if (isClickNextBtn.value) return
   if (checkAnswerIsSelect(questionNum.value)) {
-    // isAssert.value = true
     nextQuestion()
   } else {
     return Snackbar.warning('請先完成當前題目再進行下一題。')

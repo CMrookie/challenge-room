@@ -60,7 +60,6 @@ export default defineComponent({
         let image = new Image()
         image.onload = (e) => {
           i++
-          console.log(Math.floor((i / len) * 100) + '%')
           // progress.value = Math.floor(i / len) * 100
           if (Math.floor(i / len) * 100 > 99) return emit('load')
         }

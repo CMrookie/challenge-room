@@ -16,6 +16,10 @@ const Archives = () => import('@/views/challengeArchives.vue')
 const Answer = () => import('@/views/challengeAnswer.vue')
 const routes: RouteRecordRaw[] = [
   {
+    path: '/',
+    redirect: '/login'
+  },
+  {
     path: '/login',
     component: Login
   },
@@ -46,7 +50,7 @@ router.beforeEach((to, from, next) => {
   const token = false // storage.get('access_token')
   devLog(['to: ', to])
   if (!token) {
-    if (to.path === '/') {
+    if (to.path === '/login') {
       devLog(['token false & to.path'])
       return next()
     }

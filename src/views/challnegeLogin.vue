@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import LoadProgress from '../components/loadProgress.vue'
 import { useLoaded } from '../utils/useLoad'
-import { login, checkToken } from '../api'
+import { login } from '../api'
 import { devLog } from '@/utils/devLog'
 import { Snackbar } from '@varlet/ui'
 
@@ -59,6 +59,7 @@ async function handleLogin() {
     return Snackbar.warning(res.data.msg)
   } catch (err) {
     devLog([err])
+    Snackbar.error(err)
   }
 }
 
@@ -91,13 +92,6 @@ function clearToken() {
   localStorage.removeItem('token')
 }
 onMounted(() => {
-  //   checkToken()
-  //     .then((res: unknown) => {
-  //       devLog(['res: ', res])
-  //     })
-  //     .catch((err) => {
-  //       devLog(['err: ', err])
-  //     })
   let store = getUser()
   clearToken()
   form.password = store?.password ?? ''

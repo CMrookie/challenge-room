@@ -2,43 +2,73 @@
   <div class="score-board">
     <div class="score-board-title">恭喜你獲得</div>
     <div class="flex justify-center">
-      <i v-for="i in starNum" :key="i" class="star"></i>
+      <i v-for="i in star" :key="i" class="star"></i>
     </div>
     <div class="challenge-score-container">
-      <span class="challenge-score">100 分</span>
+      <span class="challenge-score">{{ score }} 分</span>
     </div>
-    <div class="challenge-designations">挑戰答題達人</div>
+    <div class="challenge-designations">{{ designation }}</div>
     <div class="challenge-detail">
       <div>
-        <span>考生</span>
-        <span>主題</span>
+        <span>考生: {{ stuName }}</span>
+        <span>主題: {{ theme }}</span>
       </div>
       <div>
-        <span>用時</span>
-        <span>正確率</span>
+        <span>用時: {{ testTime }}</span>
+        <span>正確率: {{ accuracy }}</span>
       </div>
-      <div>開始時間</div>
-      <div>結束時間</div>
+      <div>開始時間: {{ startTime }}</div>
+      <div>結束時間: {{ endTime }}</div>
     </div>
     <div class="flex justify-center">
       <div class="btn-paper" @click="viewAnswer">你的試卷</div>
-      <div class="btn-comfirm" >確定</div>
+      <div class="btn-comfirm" @click="handleComfirm">確定</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const router = useRouter()
-const starNum = ref<number>(0)
-starNum.value = 3
+interface Props {
+  score?: number
+  designation?: string
+  stuName?: string
+  theme?: string
+  testTime?: number | string
+  accuracy?: string
+  startTime?: string
+  endTime?: string
+}
 
-function viewAnswer(){
+const props = withDefaults(defineProps<Props>(), {
+  score: 0,
+  designation: '',
+  stuName: '',
+  theme: '',
+  testTime: '',
+  accuracy: '0',
+  startTime: '',
+  endTime: ''
+})
+
+const star = computed(() => {
+  if (props.score < 60) return 1
+  if (props.score < 80 && props.score >= 60) return 2
+  if (props.score >= 80) return 3
+  return 0
+})
+
+const router = useRouter()
+
+function viewAnswer() {
   // is_Inquiry.value = true
-  router.push({path:'/Answer'})
+  router.push({ path: '/Answer' })
+}
+function handleComfirm() {
+  router.push({ path: '/archives' })
 }
 </script>
 
-<style>
+<style scoped>
 .score-board {
   @apply border-2 border-black rounded bg-white relative;
   width: 90vw;

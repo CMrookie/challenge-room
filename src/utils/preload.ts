@@ -36,7 +36,6 @@ export default function preload() {
   const len = preloadList.length
   let i = 0
   function loadedFn(e: Event) {
-    console.log('loaded image: ', e)
     i++
     return Math.floor(i / len) * 100
   }
