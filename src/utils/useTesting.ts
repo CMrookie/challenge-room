@@ -1,3 +1,5 @@
+import { devLog } from './devLog'
+
 export function useTesting() {
   const isFinish = ref<boolean>(false)
   const isFeeback = ref<boolean>(false)
@@ -6,6 +8,7 @@ export function useTesting() {
     _answerList[select] === 1
       ? (_answerList[select] = 0)
       : (_answerList[select] = 1)
+    devLog(['mutipleSelect: ', _answerList])
     return _answerList
   }
   function singleSelect(answerList: number[], select: number): (0 | 1)[] {
