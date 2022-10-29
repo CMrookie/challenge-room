@@ -1,8 +1,8 @@
 <template>
   <main class="w-full h-full bg-main-bg flex flex-col items-center relative">
     <div class="container-wrap">
-      <transition name="">
-        <section class="container">
+      <transition name="fade">
+        <section v-show="isTesting" class="container">
           <div class="time">{{ questionTime }}</div>
           <div class="progress">
             {{ questionNum + 1 }}/{{ questionList.length }}
@@ -25,15 +25,18 @@
     <footer class="footer">
       <div class="next-btn" @click="handleNextClick">下一題</div>
     </footer>
-    <ChallengeMask v-if="isFinish">
-      <ChallengeScroeBoard></ChallengeScroeBoard>
-    </ChallengeMask>
-
-    <ChallengeMask v-if="isFeeback" @click="handleClick">
-      <div class="text-white">
-        <ChallengeFeeback :type="feebackType"></ChallengeFeeback>
-      </div>
-    </ChallengeMask>
+    <transition name="fade">
+      <ChallengeMask v-show="isFinish">
+        <ChallengeScroeBoard></ChallengeScroeBoard>
+      </ChallengeMask>
+    </transition>
+    <transition name="fade">
+      <ChallengeMask v-show="isFeeback" @click="handleClick">
+        <div class="text-white">
+          <ChallengeFeeback :type="feebackType"></ChallengeFeeback>
+        </div>
+      </ChallengeMask>
+    </transition>
   </main>
 </template>
 
@@ -53,6 +56,7 @@ import { useTesting } from '@/utils/useTesting'
  * @params type 1 单选
  * @params type 2 多选
  */
+const isTesting = ref<boolean>(false)
 const store = useAppStore()
 const questionNum = ref<number>(0)
 const isAssert = ref<boolean>(false)
@@ -93,49 +97,97 @@ function feebackCountdown() {
     if (questionNum.value + 1 === questionList.length) {
       // TODO
       // show score board
-      // showScoreBoard()
       devLog(['test score: ', calcScore(questionList)])
-      clearCountdown
+      clearCountdown()
+      setUserAnswer2QuestionList()
+      showScoreBoard()
       return
     }
-    // showFeeback()
-    questionList[questionNum.value]['userAnswer'] =
-      userAnswerList[questionNum.value]
-    isAssert.value = false
-    questionNum.value++
-    isFeeback.value = false
-    questionTime.value = questionList[questionNum.value]?.time ?? 0
-    // nestQuestion
-    timeCountdown(questionCountdown)
+    showFeeback()
   }
 }
 
-function showFeeback() {}
+function stayAnswerCountdown() {
+  stayAnswerTime.value--
+  if (stayAnswerTime.value <= 0) {
+    clearCountdown()
+    stayAnswer()
+  }
+}
 
-function showScoreBoard() {}
+function stayAnswer() {
+  toggleIsFeeback()
+  toggleIsAssert()
+  toggleIsTestion()
+  setCountdownTime('feeback', 2)
+  timeCountdown(feebackCountdown)
+}
+
+function showFeeback() {
+  setUserAnswer2QuestionList()
+  questionNum.value++
+  toggleIsTestion()
+  toggleIsFeeback()
+  setCountdownTime('question', questionList[questionNum.value].time)
+  // nestQuestion
+  timeCountdown(questionCountdown)
+}
+
+function showScoreBoard() {
+  clearCountdown()
+  toggleIsFeeback()
+  isFinish.value = true
+}
 
 function nextQuestion() {
   clearCountdown()
-  // feebackTime.value = 1
-  isAssert.value = true
+  toggleIsAssert()
   let answerAssert = assertAnswer(
     answerList[questionNum.value],
     userAnswerList[questionNum.value]
   )
   answerAssert ? (feebackType.value = 'correct') : (feebackType.value = 'cross')
   questionList[questionNum.value]['isCorrect'] = answerAssert
-  isFeeback.value = true
+
   nextTick(() => {
-    // timeCountdown(feebackCountdown)
     // showFeeback()
-    feebackTime.value = 2
-    timeCountdown(feebackCountdown)
-    // questionNum.value++
+    setCountdownTime('answer', 2)
+    timeCountdown(stayAnswerCountdown)
   })
+}
+function setCountdownTime(type: string, time?: number) {
+  switch (type) {
+    case 'question':
+      questionList[questionNum.value].time
+        ? (questionTime.value = questionList[questionNum.value].time + 1)
+        : (questionTime.value = time ?? 0)
+      break
+    case 'feeback':
+      time ? (feebackTime.value = time + 1) : (feebackTime.value = 0)
+      break
+    case 'answer':
+      time ? (stayAnswerTime.value = time + 1) : (stayAnswerTime.value = 0)
+      break
+  }
+}
+function setUserAnswer2QuestionList() {
+  questionList[questionNum.value]['userAnswer'] =
+    userAnswerList[questionNum.value]
+}
+function toggleIsAssert() {
+  isAssert.value = !isAssert.value
+}
+function toggleIsFeeback() {
+  isFeeback.value = !isFeeback.value
+}
+function toggleIsTestion() {
+  isTesting.value = !isTesting.value
 }
 
 async function initTest() {
-  questionTime.value = questionList[questionNum.value].time
+  // questionTime.value = questionList[questionNum.value].time
+  toggleIsTestion()
+  setCountdownTime('question', questionList[questionNum.value].time)
   clearCountdown()
   timeCountdown(questionCountdown)
 }

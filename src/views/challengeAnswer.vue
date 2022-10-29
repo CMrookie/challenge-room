@@ -45,7 +45,7 @@ function back() {
 }
 </script>
 
-<style>
+<style scoped>
 .container-wrap {
   @apply flex items-center flex-col;
   padding-top: 1vh;
