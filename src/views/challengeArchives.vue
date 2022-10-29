@@ -8,16 +8,16 @@
       </div>
       <div class="user-info-rigth">
         <div class="name-wrap">
-          <span class="name">{{ArchivesName}}</span>
+          <span class="name">{{ ArchivesName }}</span>
         </div>
         <div class="flex justify-between">
           <div class="flex flex-col">
-            <span>班级：{{ArchivesGradeName}}</span>
-            <span>学号：{{ArchivesUserName}}</span>
+            <span>班级：{{ ArchivesGradeName }}</span>
+            <span>学号：{{ ArchivesUserName }}</span>
           </div>
           <div class="flex flex-col">
-            <span>学校：{{ArchivesSchoolName}}</span>
-            <span>ID：{{ArchivesID}}</span>
+            <span>学校：{{ ArchivesSchoolName }}</span>
+            <span>ID：{{ ArchivesID }}</span>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
       </template>
     </ul>
     <ChallengeQuit></ChallengeQuit>
-    <ChallengeMask v-if=is_Inquiry>
+    <ChallengeMask v-if="is_Inquiry">
       <ChallengeScroeBoard></ChallengeScroeBoard>
     </ChallengeMask>
     <footer class="footer">
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { initCustomFormatter } from 'vue';
+import { initCustomFormatter } from 'vue'
 import ChallengeQuit from '../components/challengeQuit.vue'
 import { getStudentsInfo } from '@/api'
 
@@ -67,7 +67,7 @@ const is_Inquiry = ref<boolean>(false)
 //ArchivesStudentInfo
 const ArchivesName = ref<string>('')
 const ArchivesUserName = ref<string>('')
-const  ArchivesGradeName = ref<string>('')
+const ArchivesGradeName = ref<string>('')
 const ArchivesID = ref<string>('')
 const ArchivesSchoolName = ref<string>('')
 //ArchivesTestInfo
@@ -76,26 +76,23 @@ const QuestionsNumber = ref<string>('')
 const TestAchievement = ref<string>('')
 const TestTime = ref<string>('')
 
-
 //生命周期
- onMounted(()=>{
+onMounted(() => {
   //
   intiStudentInfo()
 })
 
 //go to view the Answer
-function viewAnswer(){
+function viewAnswer() {
   is_Inquiry.value = true
   //router.push({path:'/Answer'})
 }
 
-function toScan(){
-  
-  router.push({path:'/Scan'})
+function toScan() {
+  router.push({ path: '/Scan' })
 }
 
-async function intiStudentInfo(){
-
+async function intiStudentInfo() {
   let res: any = await getStudentsInfo()
   //console.log('>>>>res>>>>intiStudentInfo',res)
   //
@@ -104,12 +101,10 @@ async function intiStudentInfo(){
     ArchivesUserName.value = res.data.username
     ArchivesGradeName.value = res.data.grade.name
     ArchivesSchoolName.value = res.data.school
-    ArchivesID.value =res.data.id
-  }else{
-
+    ArchivesID.value = res.data.id
+  } else {
   }
 }
-
 </script>
 
 <style scoped>
@@ -154,9 +149,9 @@ async function intiStudentInfo(){
   margin: 3vw 0;
 }
 .challenge-list::-webkit-scrollbar {
-   width: 0 !important;
-   height: 0px !important;
- }
+  width: 0 !important;
+  height: 0px !important;
+}
 .challenge-item {
   @apply flex justify-between;
   height: 12vw;
