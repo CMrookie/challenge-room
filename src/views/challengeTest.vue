@@ -95,6 +95,8 @@ function feebackCountdown() {
       // show score board
       // showScoreBoard()
       devLog(['test score: ', calcScore(questionList)])
+      clearCountdown
+      return
     }
     // showFeeback()
     questionList[questionNum.value]['userAnswer'] =
@@ -102,7 +104,7 @@ function feebackCountdown() {
     isAssert.value = false
     questionNum.value++
     isFeeback.value = false
-    questionTime.value = questionList[questionNum.value].time
+    questionTime.value = questionList[questionNum.value]?.time ?? 0
     // nestQuestion
     timeCountdown(questionCountdown)
   }
@@ -150,6 +152,7 @@ function handleClick() {
 
 function handleSelect(index: number) {
   devLog(['select: ', index])
+  devLog(['question type: ', questionList[questionNum.value].type])
   if (
     questionList[questionNum.value].type === 0 ||
     questionList[questionNum.value].type === 1
@@ -159,7 +162,7 @@ function handleSelect(index: number) {
       index
     )
   }
-  if (questionList[questionNum.value] === 2) {
+  if (questionList[questionNum.value].type === 2) {
     userAnswerList[questionNum.value] = mutipleSelect(
       userAnswerList[questionNum.value],
       index
