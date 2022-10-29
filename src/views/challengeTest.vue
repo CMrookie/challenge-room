@@ -13,8 +13,8 @@
               :assert="isAssert"
               :answer="answerList[questionNum]"
               :user-answer="userAnswerList[questionNum]"
-              :question="questionList[questionNum].title"
-              :options="questionList[questionNum].options"
+              :question="questionList[questionNum]?.title"
+              :options="questionList[questionNum]?.options"
               @select="handleSelect"
             ></ChallengeQuestion>
           </div>
@@ -28,6 +28,7 @@
     <ChallengeMask v-if="isFinish">
       <ChallengeScroeBoard></ChallengeScroeBoard>
     </ChallengeMask>
+
     <ChallengeMask v-if="isFeeback" @click="handleClick">
       <div class="text-white">
         <ChallengeFeeback :type="feebackType"></ChallengeFeeback>
@@ -54,12 +55,11 @@ import { useTesting } from '@/utils/useTesting'
  */
 const store = useAppStore()
 const questionNum = ref<number>(0)
-const questionList = store.questionList
-console.log('questionList from store : ', questionList)
 const isAssert = ref<boolean>(false)
 const feebackType = ref<string>('')
-const answerList = store.answerList // toRef(store, 'answerList') //ref<number[][]>([])
-const userAnswerList = store.userAnswerList // toRef(store, 'userAnswerList') //ref<number[][]>([])
+const questionList = store.questionList ?? []
+const answerList = store.answerList ?? [] // toRef(store, 'answerList') //ref<number[][]>([])
+const userAnswerList = store.userAnswerList ?? [] // toRef(store, 'userAnswerList') //ref<number[][]>([])
 const {
   singleSelect,
   mutipleSelect,
@@ -76,6 +76,7 @@ const {
   feebackTime,
   stayAnswerTime
 } = useCountdown()
+devLog(['questionList from store : ', questionList])
 
 function questionCountdown() {
   questionTime.value--
@@ -91,13 +92,18 @@ function feebackCountdown() {
     // finish test
     if (questionNum.value + 1 === questionList.length) {
       // TODO
-      // show score board c
+      // show score board
+      // showScoreBoard()
+      devLog(['test score: ', calcScore(questionList)])
     }
-    // nestQuestion
+    // showFeeback()
+    questionList[questionNum.value]['userAnswer'] =
+      userAnswerList[questionNum.value]
     isAssert.value = false
     questionNum.value++
     isFeeback.value = false
     questionTime.value = questionList[questionNum.value].time
+    // nestQuestion
     timeCountdown(questionCountdown)
   }
 }
@@ -119,7 +125,7 @@ function nextQuestion() {
   isFeeback.value = true
   nextTick(() => {
     // timeCountdown(feebackCountdown)
-    showFeeback()
+    // showFeeback()
     feebackTime.value = 2
     timeCountdown(feebackCountdown)
     // questionNum.value++
@@ -127,26 +133,23 @@ function nextQuestion() {
 }
 
 async function initTest() {
-  questionTime.value = 10
+  questionTime.value = questionList[questionNum.value].time
   clearCountdown()
   timeCountdown(questionCountdown)
 }
 onMounted(async () => {
   await initTest()
-  console.log('questionList: ', store.questionList)
+  devLog(['questionList: ', store.questionList])
 })
 
 const router = useRouter()
-// function handleNextClick() {
-//   router.push({ path: '/archives' })
-// }
 
 function handleClick() {
   // a.value = 'b'
 }
 
 function handleSelect(index: number) {
-  console.log('select: ', index)
+  devLog(['select: ', index])
   if (
     questionList[questionNum.value].type === 0 ||
     questionList[questionNum.value].type === 1
