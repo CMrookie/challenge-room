@@ -39,7 +39,8 @@ module.exports = {
         'test-black': "url('./src/assets/images/zy_icon01b.png')",
         'paper-white': "url('./src/assets/images/zy_icon02a.png')",
         'paper-black': "url('./src/assets/images/zy_icon02b.png')",
-        back: "url('./src/assets/images/back.png')"
+        back: "url('./src/assets/images/back.png')",
+        
       }
     }
   },
