@@ -6,23 +6,19 @@
 </template> -->
 <script lang="tsx">
 import { RouteLocation } from 'vue-router'
-// import LoadProgress from './components/loadProgress.vue'
+import { Transition } from 'vue'
 
 export default defineComponent({
   setup() {
-    // console.log(preloadList)
     document.body.addEventListener('touchstart', function (): boolean {
       return false
     })
-    // <LoadProgress preloadList={preloadList}></LoadProgress>
     return () => (
       <>
         <router-view
           v-slots={{
             default: (scope: { Component: unknown; route: RouteLocation }) => (
-              <transiton name={scope.route.meta.transiton || 'fade'}>
-                {scope.Component}
-              </transiton>
+              <Transition name="fade">{scope.Component}</Transition>
             )
           }}
         ></router-view>

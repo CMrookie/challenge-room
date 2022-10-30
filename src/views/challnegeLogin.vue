@@ -57,7 +57,7 @@ async function handleLogin() {
       return router.push({ path: '/scan' })
     }
     return Snackbar.warning(res.data.msg)
-  } catch (err) {
+  } catch (err: any) {
     devLog([err])
     Snackbar.error(err)
   }

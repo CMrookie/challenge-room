@@ -1,7 +1,6 @@
 <template>
   <main class="w-full h-full bg-main-bg">
     <ul class="challenge-list w-full h-full">
-      
       <div class="container-wrap">
         <dev class="btn-back" @click="back"></dev>
         <h2 class="header-title">我的答題</h2>

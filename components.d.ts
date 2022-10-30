@@ -9,7 +9,6 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ChallengeFeeback: typeof import('./src/components/challengeFeeback.vue')['default']
     ChallengeMask: typeof import('./src/components/challengeMask.vue')['default']
-    ChallengeQRScan: typeof import('./src/components/challengeQRScan.vue')['default']
     ChallengeQuestion: typeof import('./src/components/challengeQuestion.vue')['default']
     ChallengeQuit: typeof import('./src/components/challengeQuit.vue')['default']
     ChallengeScroeBoard: typeof import('./src/components/challengeScroeBoard.vue')['default']
@@ -17,6 +16,5 @@ declare module '@vue/runtime-core' {
     LoadProgress: typeof import('./src/components/loadProgress.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    VarBackTop: typeof import('@varlet/ui')['_BackTopComponent']
   }
 }

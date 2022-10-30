@@ -16,7 +16,18 @@
               :question="questionList[questionNum]?.title"
               :options="questionList[questionNum]?.options"
               @select="handleSelect"
-            ></ChallengeQuestion>
+            >
+              <div class="w-full flex justify-center vidwo-wrap">
+                <VideoPlayer
+                  src="https://vjs.zencdn.net/v/oceans.mp4"
+                  poster="https://vjs.zencdn.net/v/oceans.png"
+                  controls
+                  :loop="false"
+                  :volume="0.6"
+                  :width="videoWidth"
+                ></VideoPlayer>
+              </div>
+            </ChallengeQuestion>
           </div>
         </section>
       </transition>
@@ -50,6 +61,8 @@
 </template>
 
 <script lang="ts" setup>
+import { VideoPlayer } from '@videojs-player/vue'
+import 'video.js/dist/video-js.css'
 import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeFeeback from '../components/challengeFeeback.vue'
@@ -60,8 +73,10 @@ import { useAppStore } from '@/store/app'
 import { useCountdown } from '@/utils/useCountdown'
 import { useTesting } from '@/utils/useTesting'
 import { useScoreBoardInfo } from '@/utils/useScoreBoardInfo'
+import { useVideoProps } from '@/utils/useVideoProps'
 import { getStudentsInfo } from '@/api'
 
+const { videoWidth } = useVideoProps()
 /**
  * @params type 0 判断
  * @params type 1 单选
@@ -228,7 +243,7 @@ onMounted(async () => {
     } else {
       Snackbar.error(res.msg)
     }
-  } catch (error) {
+  } catch (error: any) {
     Snackbar.error(error)
   }
 })
@@ -323,5 +338,18 @@ function handleNextClick() {
   padding-bottom: 2vw;
   font-size: 4vw;
   letter-spacing: 0.5vw;
+}
+.vidwo-wrap {
+  padding-top: 2vw;
+}
+</style>
+
+<style>
+.video-js .vjs-big-play-button {
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 </style>
