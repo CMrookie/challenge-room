@@ -17,7 +17,7 @@
           </div>
           <div class="flex flex-col">
             <span>学校：{{ ArchivesSchoolName }}</span>
-            <span>ID：{{ ArchivesID }}</span>
+            <!-- <span>ID：{{ ArchivesID }}</span> -->
           </div>
         </div>
       </div>
