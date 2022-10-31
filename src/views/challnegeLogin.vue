@@ -27,6 +27,7 @@
         type="password"
         class="login-input"
         @blur="checkPassword"
+        @keyup="passwordVal($event)"
       />
     </form>
     <div class="login-btn" @click="handleLogin">登錄</div>
@@ -97,6 +98,19 @@ onMounted(() => {
   form.password = store?.password ?? ''
   form.username = store?.username ?? ''
 })
+
+//键盘收起
+function passwordVal(e){
+  let timer = null;
+    timer && clearInterval(timer)
+    timer = setTimeout(() => { }, 500);
+    let keycode = window.event ? e.keyCode : e.which;
+    if (keycode == 13) {
+      e.preventDefault();
+      e.target.blur();//使输入框失去焦点。收起软键盘
+    }
+}
+
 </script>
 
 <style scoped>
