@@ -15,7 +15,7 @@
       </div>
       <div>
         <span>用時: {{ testTime }}</span>
-        <span>正確率: {{ accuracy }}</span>
+        <!-- <span>正確率: {{ accuracy }}</span> -->
       </div>
       <div>開始時間: {{ startTime }}</div>
       <div>結束時間: {{ endTime }}</div>
