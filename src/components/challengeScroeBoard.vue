@@ -1,6 +1,6 @@
 <template>
   <div class="score-board">
-    <div class="score-board-title">恭喜你獲得</div>
+    <div class="score-board-title">本次挑戰成績</div>
     <div class="flex justify-center">
       <i v-for="i in star" :key="i" class="star"></i>
     </div>
@@ -10,7 +10,7 @@
     <div class="challenge-designations">{{ designation }}</div>
     <div class="challenge-detail">
       <div>
-        <span>考生: {{ stuName }}</span>
+        <span>學生: {{ stuName }}</span>
         <span>主題: {{ theme }}</span>
       </div>
       <div>
@@ -21,7 +21,7 @@
       <div>結束時間: {{ endTime }}</div>
     </div>
     <div class="flex justify-center">
-      <div class="btn-paper" @click="viewAnswer">你的試卷</div>
+      <div class="btn-paper" @click="viewAnswer">正確答案</div>
       <div class="btn-comfirm" @click="handleComfirm">確定</div>
     </div>
   </div>

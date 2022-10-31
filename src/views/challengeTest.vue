@@ -283,7 +283,7 @@ function handleNextClick() {
   if (checkAnswerIsSelect(questionNum.value)) {
     nextQuestion()
   } else {
-    return Snackbar.warning('請先完成當前題目再進行下一題。')
+    return Snackbar.warning('溫馨提示：必須選擇答案!')
   }
 }
 </script>
