@@ -100,17 +100,16 @@ onMounted(() => {
 })
 
 //键盘收起
-function passwordVal(e){
-  let timer = null;
-    timer && clearInterval(timer)
-    timer = setTimeout(() => { }, 500);
-    let keycode = window.event ? e.keyCode : e.which;
-    if (keycode == 13) {
-      e.preventDefault();
-      e.target.blur();//使输入框失去焦点。收起软键盘
-    }
+function passwordVal(e: any) {
+  let timer = null
+  timer && clearInterval(timer)
+  timer = setTimeout(() => {}, 500)
+  let keycode = window.event ? e.keyCode : e.which
+  if (keycode == 13) {
+    e.preventDefault()
+    e.target.blur() //使输入框失去焦点。收起软键盘
+  }
 }
-
 </script>
 
 <style scoped>

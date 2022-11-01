@@ -2,12 +2,12 @@ import { useAppStore } from '@/store/app'
 
 export function useScoreBoardInfo() {
   const stuName = ref<string>('')
-  const theme = ref<string>('')
   const testTime = ref<string>('')
   const startTime = ref<string>('')
   const endTime = ref<string>('')
   const store = useAppStore()
   const score = ref<number>(0)
+  const theme = computed(() => store.questionsData.change.name)
   const designation = computed(() => {
     if (score.value < 60) return '下次努力'
     if (score.value < 80 && score.value >= 60) return '仍需努力'

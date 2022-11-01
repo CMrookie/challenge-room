@@ -19,7 +19,7 @@ module.exports = {
         'border-black': '#aabbca'
       },
       backgroundImage: {
-        logo: "url('/images/WechatIMG376.png')",
+        logo: "url('/images/logo.png')",
         scan: "url('/images/2222.png')",
         'login-bg': "url('/images/bg.png')",
         'select-off': "url('/images/icon-01.png')",
@@ -27,6 +27,7 @@ module.exports = {
         quit: "url('/images/icon-03.png')",
         tick: "url('/images/icon-04.png')",
         cross: "url('/images/icon-05.png')",
+        over: "url('/images/WechatIMG419.png')",
         time: "url('/images/part-01.png')",
         progress: "url('/images/part-02.png')",
         title: "url('/images/part-03.png')",

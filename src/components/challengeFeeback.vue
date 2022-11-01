@@ -1,6 +1,7 @@
 <template>
   <div v-if="type === 'correct'" class="correct"></div>
   <div v-if="type === 'cross'" class="cross"></div>
+  <div v-if="type === 'timeover'" class="time-over"></div>
 </template>
 
 <script lang="tsx" setup>
@@ -25,7 +26,8 @@ watch(
 
 <style scoped>
 .correct,
-.cross {
+.cross,
+.time-over {
   @apply bg-no-repeat bg-cover;
   width: 70vw;
   height: 70vw;
@@ -35,5 +37,8 @@ watch(
 }
 .cross {
   @apply bg-answer-wrong;
+}
+.time-over {
+  @apply bg-over;
 }
 </style>

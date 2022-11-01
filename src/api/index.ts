@@ -34,6 +34,6 @@ export function getQuestions(params: GetQuestionsParams) {
 export function getStudentsInfo() {
   return request({
     url: 'student/get_user',
-    method: 'get',
+    method: 'get'
   })
 }
