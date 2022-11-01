@@ -9,10 +9,10 @@ export function useScoreBoardInfo() {
   const store = useAppStore()
   const score = ref<number>(0)
   const designation = computed(() => {
-    if (score.value < 60) return '下次努力'
-    if (score.value < 80 && score.value >= 60) return '仍需努力'
-    if (score.value < 100 && score.value >= 80) return '下次争夺挑战王'
-    if (score.value === 100) return '挑战王者'
+    if (score.value < 60) return ''
+    if (score.value < 80 && score.value >= 60) return ''
+    if (score.value < 100 && score.value >= 80) return ''
+    if (score.value === 100) return '恭喜您。答題全對！'
   })
   const accuracy = computed(() => {
     let correctNum = 0
