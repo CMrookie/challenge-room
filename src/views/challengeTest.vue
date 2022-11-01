@@ -7,7 +7,9 @@
           <div class="progress">
             {{ questionNum + 1 }}/{{ questionList.length }}
           </div>
-          <div class="title">視頻答題</div>
+          <div class="title">
+            {{ typeList[questionList[questionNum].type] }}
+          </div>
           <div>
             <ChallengeQuestion
               :assert="isAssert"
@@ -17,7 +19,7 @@
               :options="questionList[questionNum]?.options"
               @select="handleSelect"
             >
-              <div class="w-full flex justify-center vidwo-wrap">
+              <!-- <div class="w-full flex justify-center vidwo-wrap">
                 <VideoPlayer
                   src="https://vjs.zencdn.net/v/oceans.mp4"
                   poster="https://vjs.zencdn.net/v/oceans.png"
@@ -26,14 +28,14 @@
                   :volume="0.6"
                   :width="videoWidth"
                 ></VideoPlayer>
-              </div>
+              </div> -->
             </ChallengeQuestion>
           </div>
         </section>
       </transition>
     </div>
 
-    <footer class="footer">
+    <footer v-show="isTesting" class="footer">
       <div class="next-btn" @click="handleNextClick">下一題</div>
     </footer>
     <transition name="fade">
@@ -61,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { VideoPlayer } from '@videojs-player/vue'
+// import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
@@ -73,15 +75,16 @@ import { useAppStore } from '@/store/app'
 import { useCountdown } from '@/utils/useCountdown'
 import { useTesting } from '@/utils/useTesting'
 import { useScoreBoardInfo } from '@/utils/useScoreBoardInfo'
-import { useVideoProps } from '@/utils/useVideoProps'
+// import { useVideoProps } from '@/utils/useVideoProps'
 import { getStudentsInfo } from '@/api'
 
-const { videoWidth } = useVideoProps()
+// const { videoWidth } = useVideoProps()
 /**
  * @params type 0 判断
  * @params type 1 单选
  * @params type 2 多选
  */
+const typeList = ['判斷題', '單選題', '多選題']
 const isTesting = ref<boolean>(false)
 const store = useAppStore()
 const questionNum = ref<number>(0)
@@ -109,7 +112,7 @@ const {
   isFeeback
 } = useTesting()
 const {
-  timer,
+  // timer,
   timeCountdown,
   clearCountdown,
   questionTime,
@@ -121,6 +124,10 @@ devLog(['questionList from store : ', questionList])
 function questionCountdown() {
   questionTime.value--
   if (questionTime.value <= 0) {
+    // time over reset userAnswer cross
+    userAnswerList[questionNum.value] = userAnswerList[questionNum.value].map(
+      (_item: number) => 0
+    )
     nextQuestion()
   }
 }
@@ -176,6 +183,7 @@ function showScoreBoard() {
   toggleIsFeeback()
   store.score = calcScore(questionList)
   isFinish.value = true
+  devLog(['提交答案： ', getAnswerData()])
 }
 
 function nextQuestion() {
@@ -186,7 +194,11 @@ function nextQuestion() {
     answerList[questionNum.value],
     userAnswerList[questionNum.value]
   )
-  answerAssert ? (feebackType.value = 'correct') : (feebackType.value = 'cross')
+  questionTime.value > 0
+    ? answerAssert
+      ? (feebackType.value = 'correct')
+      : (feebackType.value = 'cross')
+    : (feebackType.value = 'timeover')
   questionList[questionNum.value]['isCorrect'] = answerAssert
 
   nextTick(() => {
@@ -224,6 +236,13 @@ function toggleIsTestion() {
   isTesting.value = !isTesting.value
 }
 
+function getAnswerData() {
+  return {
+    answer: questionList,
+    total_grade: store.score
+  }
+}
+
 async function initTest() {
   // questionTime.value = questionList[questionNum.value].time
   toggleIsTestion()
@@ -239,7 +258,7 @@ onMounted(async () => {
     if (res.code === 200) {
       devLog(['getStudentInfo: ', res])
       stuName.value = res.data.username
-      theme.value = res.data.school
+      // theme.value = res.data.school
     } else {
       Snackbar.error(res.msg)
     }
