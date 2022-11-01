@@ -5,6 +5,8 @@
 </template>
 
 <script lang="tsx" setup>
+import { devLog } from '@/utils/devLog'
+
 interface Props {
   type: string
 }
@@ -17,7 +19,7 @@ console.log('run', props.type)
 watch(
   () => props.type,
   (newVal, oldVal) => {
-    console.log('type: ', newVal, oldVal)
+    devLog(['type: ', newVal, oldVal])
     if (newVal == 'a') tip.value = 'a'
     if (newVal == 'b') tip.value = 'b'
   }

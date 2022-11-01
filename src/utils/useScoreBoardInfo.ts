@@ -1,4 +1,5 @@
 import { useAppStore } from '@/store/app'
+import { devLog } from './devLog'
 
 export function useScoreBoardInfo() {
   const stuName = ref<string>('')
@@ -17,7 +18,7 @@ export function useScoreBoardInfo() {
   const accuracy = computed(() => {
     let correctNum = 0
     store.questionList.forEach((item: any) => {
-      console.log(correctNum)
+      devLog([correctNum])
       if (item.isCorrect) correctNum++
     })
     return (correctNum / store.questionList.length) * 100 + '%'

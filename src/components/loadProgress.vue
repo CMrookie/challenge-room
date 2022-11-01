@@ -1,4 +1,5 @@
 <script lang="tsx">
+import { devLog } from '@/utils/devLog'
 import { PropType } from 'vue'
 
 export default defineComponent({
@@ -48,7 +49,7 @@ export default defineComponent({
       })
     }
     onMounted(() => {
-      console.log('mounted')
+      devLog(['mounted'])
       preloadImages(preloadList)
     })
 

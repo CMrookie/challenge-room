@@ -183,7 +183,7 @@ function showScoreBoard() {
   toggleIsFeeback()
   store.score = calcScore(questionList)
   isFinish.value = true
-  devLog(['提交答案： ', getAnswerData()])
+  devLog(['提交答案：', getAnswerData()])
 }
 
 function nextQuestion() {

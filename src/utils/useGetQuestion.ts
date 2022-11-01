@@ -1,6 +1,7 @@
 import { getQuestions } from '@/api'
 import { useAppStore } from '@/store/app'
 import { Snackbar } from '@varlet/ui'
+import { devLog } from './devLog'
 import { useCountdown } from './useCountdown'
 
 export function useGetQuestion() {
@@ -22,7 +23,7 @@ export function useGetQuestion() {
   async function saveQuestion2Store(code: string) {
     try {
       const res: any = await getQuestions({ code })
-      console.log('getQuestion data: ', res.data)
+      devLog(['getQuestion data: ', res.data])
       if (res.code === 200) return (store.questionsData = res.data)
       else {
         tryTime++
