@@ -76,7 +76,7 @@ import { useCountdown } from '@/utils/useCountdown'
 import { useTesting } from '@/utils/useTesting'
 import { useScoreBoardInfo } from '@/utils/useScoreBoardInfo'
 // import { useVideoProps } from '@/utils/useVideoProps'
-import { getStudentsInfo } from '@/api'
+import { getStudentsInfo, finishAnswer } from '@/api'
 
 // const { videoWidth } = useVideoProps()
 /**
@@ -178,12 +178,14 @@ function showFeeback() {
   timeCountdown(questionCountdown)
 }
 
-function showScoreBoard() {
+async function showScoreBoard() {
   clearCountdown()
   toggleIsFeeback()
   store.score = calcScore(questionList)
-  isFinish.value = true
+  // refer answer
   devLog(['提交答案：', getAnswerData()])
+  await finishTest()
+  isFinish.value = true
 }
 
 function nextQuestion() {
@@ -238,9 +240,29 @@ function toggleIsTestion() {
 
 function getAnswerData() {
   return {
-    answer: questionList,
+    answers: questionList.map(
+      (item: {
+        id: any
+        title: any
+        options: any
+        type: any
+        isCorrect: any
+        userAnswer: any
+      }) => {
+        const { id, title, options, type, isCorrect, userAnswer } = item
+        return { id, title, options, type, isCorrect, userAnswer }
+      }
+    ),
+    appid: store.questionsData.appid,
     total_grade: store.score
   }
+}
+
+async function finishTest() {
+  try {
+    let res = await finishAnswer(getAnswerData())
+    devLog(['finish test: ', res])
+  } catch (error: any) {}
 }
 
 async function initTest() {
