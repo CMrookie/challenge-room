@@ -27,7 +27,7 @@ export default defineComponent({
       new URL('/images/part-08.png', import.meta.url).href,
       new URL('/images/part-09.png', import.meta.url).href,
       new URL('/images/part-10.png', import.meta.url).href,
-      new URL('/images/WechatIMG419.png', import.meta.url).href,
+      new URL('/images/part-11.png', import.meta.url).href,
       new URL('/images/zy_icon01a.png', import.meta.url).href,
       new URL('/images/zy_icon01b.png', import.meta.url).href,
       new URL('/images/zy_icon02a.png', import.meta.url).href,

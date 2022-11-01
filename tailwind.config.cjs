@@ -27,7 +27,7 @@ module.exports = {
         quit: "url('/images/icon-03.png')",
         tick: "url('/images/icon-04.png')",
         cross: "url('/images/icon-05.png')",
-        over: "url('/images/WechatIMG419.png')",
+        over: "url('/images/part-11.png')",
         time: "url('/images/part-01.png')",
         progress: "url('/images/part-02.png')",
         title: "url('/images/part-03.png')",
