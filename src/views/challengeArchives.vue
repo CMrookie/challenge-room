@@ -41,7 +41,10 @@
     </ul>
     <ChallengeQuit></ChallengeQuit>
     <ChallengeMask v-if="is_Inquiry">
-      <ChallengeScroeBoard></ChallengeScroeBoard>
+      <ChallengeScroeBoard
+        @check-answer="handleCheckAnswer"
+        @comfirm="handleComfirm"
+      ></ChallengeScroeBoard>
     </ChallengeMask>
     <footer class="footer">
       <div class="bg-white border-r active:bg-slate-200" @click="toScan">
@@ -104,6 +107,14 @@ async function intiStudentInfo() {
     ArchivesID.value = res.data.id
   } else {
   }
+}
+
+function handleCheckAnswer() {
+  router.push({ path: '/Answer' })
+}
+function handleComfirm() {
+  // router.push({ path: '/archives' })
+  is_Inquiry.value = false
 }
 </script>
 

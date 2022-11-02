@@ -49,6 +49,8 @@
           :start-time="startTime"
           :end-time="endTime"
           :theme="theme"
+          @check-answer="handleCheckAnswer"
+          @comfirm="handleComfirm"
         ></ChallengeScroeBoard>
       </ChallengeMask>
     </transition>
@@ -242,17 +244,18 @@ function getAnswerData() {
   return {
     answers: questionList.map(
       (item: {
-        id: any
-        title: any
-        options: any
-        type: any
-        isCorrect: any
-        userAnswer: any
+        id: number
+        title: string
+        options: { content: string; content1: string | null; default: boolean }
+        type: number
+        isCorrect: boolean
+        userAnswer: 0 | 1[]
       }) => {
         const { id, title, options, type, isCorrect, userAnswer } = item
         return { id, title, options, type, isCorrect, userAnswer }
       }
     ),
+    sid: store.questionsData.sid,
     appid: store.questionsData.appid,
     total_grade: store.score
   }
@@ -262,6 +265,11 @@ async function finishTest() {
   try {
     let res = await finishAnswer(getAnswerData())
     devLog(['finish test: ', res])
+    score.value = res.data.grade
+    startTime.value = res.data.start_time
+    endTime.value = res.data.end_time
+    testTime.value = res.data.total_time
+    stuName.value = res.data.username
   } catch (error: any) {}
 }
 
@@ -326,6 +334,14 @@ function handleNextClick() {
   } else {
     return Snackbar.warning('溫馨提示：必須選擇答案!')
   }
+}
+
+const router = useRouter()
+function handleCheckAnswer() {
+  router.push({ path: '/Answer' })
+}
+function handleComfirm() {
+  router.push({ path: '/archives' })
 }
 </script>
 

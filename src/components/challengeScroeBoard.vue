@@ -57,14 +57,16 @@ const star = computed(() => {
   return 0
 })
 
-const router = useRouter()
+const emit = defineEmits(['checkAnswer', 'comfirm'])
 
 function viewAnswer() {
   // is_Inquiry.value = true
-  router.push({ path: '/Answer' })
+  // router.push({ path: '/Answer' })
+  emit('checkAnswer')
 }
 function handleComfirm() {
-  router.push({ path: '/archives' })
+  // router.push({ path: '/archives' })
+  emit('comfirm')
 }
 </script>
 
