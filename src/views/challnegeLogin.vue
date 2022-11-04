@@ -40,15 +40,22 @@ import { useLoaded } from '../utils/useLoad'
 import { login } from '../api'
 import { devLog } from '@/utils/devLog'
 import { Snackbar } from '@varlet/ui'
+import { useCountdown } from '@/utils/useCountdown'
 
 const { isLoaded, handleLoad } = useLoaded()
 
 const router = useRouter()
 const tipUsername = ref<string>('')
 const tipPassword = ref<string>('')
+const isDebounce = ref<boolean>(false)
+const debounceTime = ref<number>(1)
 
+const { timeCountdown, clearCountdown } = useCountdown()
 async function handleLogin() {
+  if (isDebounce.value) return
   if (!checkForm()) return
+  isDebounce.value = true
+  debounceTime.value = 1
   try {
     let res: any = await login(form)
     devLog(['login res: ', res])
@@ -62,6 +69,14 @@ async function handleLogin() {
     devLog([err])
     Snackbar.error(err)
   }
+  timeCountdown(debounceLogin)
+}
+function debounceLogin() {
+  if (debounceTime.value <= 0) {
+    clearCountdown
+    return (isDebounce.value = false)
+  }
+  debounceTime.value--
 }
 
 const form = reactive({

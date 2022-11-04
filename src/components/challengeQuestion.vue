@@ -4,7 +4,7 @@
       {{ question ?? '' }}
     </p>
     <slot></slot>
-    <ul v-if="options" class="answer-oprions">
+    <ul class="answer-oprions">
       <li
         v-for="(option, index) in options ?? []"
         :key="index"

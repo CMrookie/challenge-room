@@ -76,7 +76,7 @@ import { useHistory } from '@/utils/useHistory'
 import { useAppStore } from '@/store/app'
 
 const router = useRouter()
-const store = useAppStore()
+// const store = useAppStore()
 
 const is_Inquiry = ref<boolean>(false)
 //ArchivesStudentInfo
@@ -127,7 +127,7 @@ async function requestHistory() {
       grade.value = res.data.grade
       testName.value = res.data.appoints.changes.name
       updateTime.value = res.data.updated_at
-      initQuestion(res.data.questions)
+      // initQuestion(res.data.questions)
       // devLog(['request history: ', res])
     } else {
       Snackbar.error(res.msg)
@@ -137,12 +137,12 @@ async function requestHistory() {
   }
 }
 
-function initQuestion(question: any) {
-  store.historyQuestionList = question.map((item: any) => {
-    item.options = JSON.parse(item.options)
-    return item
-  })
-}
+// function initQuestion(question: any) {
+//   store.historyQuestionList = question.map((item: any) => {
+//     item.options = JSON.parse(item.options)
+//     return item
+//   })
+// }
 
 function handleCheckAnswer() {
   router.push({ path: '/answer' })

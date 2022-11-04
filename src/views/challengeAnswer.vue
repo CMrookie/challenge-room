@@ -4,53 +4,96 @@
       <div class="container-wrap">
         <dev class="btn-back" @click="back"></dev>
         <h2 class="header-title">我的答題</h2>
-        <section
-          v-for="(question, index) in historyQuestionList"
-          :key="index"
-          class="container"
-        >
-          <!-- <div class="time">60s</div> -->
-          <div class="progress">
-            {{ index + 1 + '/' + historyQuestionList.length }}
-          </div>
-          <div class="title">{{ typeList[question.type] }}</div>
-          <div>
-            <ChallengeQuestion
-              :assert="true"
-              :answer="defaultAnswer[index]"
-              :user-answer="userAnswer[index]"
-              :question="question.title"
-              :options="question.options"
-            ></ChallengeQuestion>
-          </div>
-          <!-- <div class="analysis-box">
-            解析:
-            <p class="text-x text-black">
-              題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx
-            </p>
-          </div> -->
-        </section>
+        <template v-if="!historyQuestionList.length && !isEmpty">
+          <p class="congratulation-tip">恭喜你，你的答題全部正確!</p>
+        </template>
+        <template v-if="historyQuestionList.length && !isEmpty">
+          <section
+            v-for="(question, index) in historyQuestionList"
+            :key="index"
+            class="container"
+          >
+            <!-- <div class="time">60s</div> -->
+            <div class="progress">
+              {{ index + 1 + '/' + historyQuestionList.length }}
+            </div>
+            <div class="title">{{ typeList[question.type] }}</div>
+            <div>
+              <ChallengeQuestion
+                :assert="true"
+                :answer="defaultAnswer[index]"
+                :user-answer="userAnswer[index]"
+                :question="question.title"
+                :options="question.options"
+              ></ChallengeQuestion>
+            </div>
+            <!-- <div class="analysis-box">
+              解析:
+              <p class="text-x text-black">
+                題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx
+              </p>
+            </div> -->
+          </section>
+        </template>
       </div>
     </ul>
   </main>
 </template>
 
 <script lang="ts" setup>
-import { useAppStore } from '@/store/app'
+// import { useAppStore } from '@/store/app'
 import ChallengeQuestion from '../components/challengeQuestion.vue'
 import { useGenerateAnswer } from '@/utils/useGenerateAnswer'
+import { getHistoryList } from '@/api'
+import { Snackbar } from '@varlet/ui'
 
-type Answer = (0 | 1)[][]
+// type Answer = (0 | 1)[][]
 const typeList = ['判斷題', '單選題', '多選題']
-const store = useAppStore()
-const userAnswer = ref<Answer>([])
-const defaultAnswer = ref<Answer>([])
-const historyQuestionList = store.historyQuestionList
+const isEmpty = ref<boolean>(true)
 const { generateAnswerList } = useGenerateAnswer()
-userAnswer.value = historyQuestionList.map((item) => {
-  return JSON.parse(item.choose)
+const historyQuestionList = ref<any[]>([])
+const userAnswer = computed(() => {
+  let list = []
+  list = historyQuestionList.value.filter((item: any) => {
+    if (!item.correct) return JSON.parse(item.choose)
+  })
+  return list.length === 0 ? [[0, 0, 0, 0]] : list
 })
-defaultAnswer.value = generateAnswerList(historyQuestionList)
+const defaultAnswer = computed(() => {
+  let list = []
+  list = generateAnswerList(
+    historyQuestionList.value.filter((item: any) => {
+      if (!item.correct) return item
+    })
+  )
+  return list.length === 0 ? [[0, 0, 0, 0]] : list
+})
+// userAnswer.value = historyQuestionList.map((item) => {
+//   return JSON.parse(item.choose)
+// })
+// defaultAnswer.value = generateAnswerList(historyQuestionList)
+
+async function getHistoryQuestion() {
+  try {
+    const res: any = await getHistoryList()
+    if (res.code === 200) {
+      isEmpty.value = false
+      console.log('res question: ', res.data.question)
+      historyQuestionList.value = res.data.questions.filter((item: any) => {
+        if (!item.correct) {
+          item.options = JSON.parse(item.options)
+          return item
+        }
+      })
+    } else {
+      Snackbar.warning(res.msg)
+    }
+  } catch (error: any) {
+    Snackbar.error(error)
+  }
+}
+
+onMounted(getHistoryQuestion)
 
 const router = useRouter()
 // go back -> archives
@@ -60,6 +103,10 @@ function back() {
 </script>
 
 <style scoped>
+.congratulation-tip {
+  /* @apply  */
+  font-size: 4vw;
+}
 .container-wrap {
   @apply flex items-center flex-col static;
   padding-top: 1vh;
