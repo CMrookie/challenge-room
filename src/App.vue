@@ -1,9 +1,3 @@
-<!-- <template>
-  vue 文件
-  <router-view v-slot="{ Component }">
-    <component :is="Component"></component>
-  </router-view>
-</template> -->
 <script lang="tsx">
 import { RouteLocation } from 'vue-router'
 import { Transition } from 'vue'
