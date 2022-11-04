@@ -114,13 +114,13 @@ function setItemState(index: number) {
 }
 .answer-option-item {
   @apply bg-question rounded-md w-full flex flex-row items-center relative;
-  padding: 2vw 8vw 2vw 6vw;
+  padding: 2vw 8vw 2vw 8vw;
   margin-bottom: 2vw;
   .select-icon {
     @apply bg-select-off bg-no-repeat bg-cover absolute top-0 bottom-0;
     left: 2vw;
-    width: 2vw;
-    height: 2vw;
+    width: 3vw;
+    height: 3vw;
     margin: auto;
   }
   .answer-text {
@@ -131,6 +131,8 @@ function setItemState(index: number) {
     @apply bg-question-select text-btn;
     .select-icon {
       @apply bg-select-on;
+      width: 4vw;
+      height: 4vw;
     }
   }
   &.correct {
@@ -145,6 +147,8 @@ function setItemState(index: number) {
     &.select {
       .select-icon {
         @apply bg-select-on;
+        width: 4vw;
+        height: 4vw;
       }
     }
   }
@@ -160,6 +164,8 @@ function setItemState(index: number) {
     &.select {
       .select-icon {
         @apply bg-select-on;
+        width: 4vw;
+        height: 4vw;
       }
     }
   }
