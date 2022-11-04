@@ -31,7 +31,7 @@ export function useHistory() {
         Snackbar.warning(res.msg)
       }
     } catch (error: any) {
-      Snackbar.error(error)
+      // Snackbar.error(error)
     }
   }
 

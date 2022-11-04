@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <ul v-if="isGetHistory" class="challenge-list">
+    <ul v-if="isGetHistory && !isEmptyData" class="challenge-list">
       <!-- <template v-for="i in 15" :key="i"> -->
       <li class="challenge-item">
         <div class="challenge-info">
@@ -73,7 +73,7 @@ import ChallengeQuit from '../components/challengeQuit.vue'
 import { getStudentsInfo, getHistoryList } from '@/api'
 import { Snackbar } from '@varlet/ui'
 import { useHistory } from '@/utils/useHistory'
-import { useAppStore } from '@/store/app'
+// import { useAppStore } from '@/store/app'
 
 const router = useRouter()
 // const store = useAppStore()
@@ -84,6 +84,7 @@ const ArchivesName = ref<string>('')
 const ArchivesUserName = ref<string>('')
 const ArchivesGradeName = ref<string>('')
 const ArchivesSchoolName = ref<string>('')
+const isEmptyData = ref<boolean>(true)
 //ArchivesTestInfo
 const { designation, theme, testTime, startTime, endTime, score } = useHistory()
 
@@ -123,6 +124,7 @@ async function requestHistory() {
   try {
     let res: any = await getHistoryList()
     if (res.code === 200) {
+      isEmptyData.value = res.data.length === 0
       isGetHistory.value = true
       grade.value = res.data.grade
       testName.value = res.data.appoints.changes.name
