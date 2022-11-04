@@ -13,7 +13,11 @@ export const useAppStore = defineStore('app', () => {
   const questionsData = ref<any>({})
   const answerList = ref<(0 | 1)[][]>([])
   const userAnswerList = ref<(0 | 1)[][]>([])
+  const historyQuestionList = ref<any[]>([])
   const score = ref<number>(0)
+  const startTime = ref<string>('')
+  const endTime = ref<string>('')
+  const testTime = ref<string>('')
 
   const questionList = computed(() => questionsData.value.question)
   // const fullName = computed(() => `${firstName.value} ${lastName.value}`)
@@ -28,6 +32,10 @@ export const useAppStore = defineStore('app', () => {
     questionList,
     answerList,
     userAnswerList,
-    score
+    historyQuestionList,
+    score,
+    startTime,
+    endTime,
+    testTime
   }
 })

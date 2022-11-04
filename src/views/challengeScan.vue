@@ -56,7 +56,7 @@ function handleQuit() {
 }
 
 function toArchives() {
-  router.push({ path: '/Archives' })
+  router.push({ path: '/archives' })
 }
 
 const _error = ref()

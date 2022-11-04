@@ -1,9 +1,9 @@
 <template>
   <main class="w-full h-full bg-main-bg flex flex-col items-center relative">
-    <div class="user-info">
+    <div v-if="isGetHistory" class="user-info">
       <div class="user-info-left">
         <div>
-          <img src="" alt="" />
+          <img :src="avater" alt="avater" />
         </div>
       </div>
       <div class="user-info-rigth">
@@ -12,36 +12,44 @@
         </div>
         <div class="flex justify-between">
           <div class="flex flex-col">
-            <span>班级：{{ ArchivesGradeName }}</span>
-            <span>学号：{{ ArchivesUserName }}</span>
+            <span></span>
+            <span>学校：{{ ArchivesSchoolName }}</span>
+            <span>編號：{{ ArchivesUserName }}</span>
           </div>
           <div class="flex flex-col">
-            <span>学校：{{ ArchivesSchoolName }}</span>
             <!-- <span>ID：{{ ArchivesID }}</span> -->
           </div>
         </div>
       </div>
     </div>
-    <ul class="challenge-list">
-      <template v-for="i in 15" :key="i">
-        <li class="challenge-item">
-          <div class="challenge-info">
-            <div class="left">
-              <span>近代史挑戰室一號室</span>
-              <span>成績：90分</span>
-            </div>
-            <div class="right">
-              <span>18/20</span>
-              <span>2022年11月20日</span>
-            </div>
+    <ul v-if="isGetHistory" class="challenge-list">
+      <!-- <template v-for="i in 15" :key="i"> -->
+      <li class="challenge-item">
+        <div class="challenge-info">
+          <div class="left">
+            <!-- <span>近代史挑戰室一號室</span> -->
+            <span>{{ testName }}</span>
+            <span>成績：{{ grade }}</span>
           </div>
-          <div class="btn-inquire" @click="viewAnswer()">查詢</div>
-        </li>
-      </template>
+          <div class="right">
+            <span></span>
+            <span>{{ updateTime }}</span>
+          </div>
+        </div>
+        <div class="btn-inquire" @click="viewAnswer()">查詢</div>
+      </li>
+      <!-- </template> -->
     </ul>
     <ChallengeQuit></ChallengeQuit>
     <ChallengeMask v-if="is_Inquiry">
       <ChallengeScroeBoard
+        :designation="designation"
+        :score="score"
+        :stu-name="ArchivesName"
+        :test-time="testTime"
+        :start-time="startTime"
+        :end-time="endTime"
+        :theme="theme"
         @check-answer="handleCheckAnswer"
         @comfirm="handleComfirm"
       ></ChallengeScroeBoard>
@@ -60,57 +68,84 @@
 </template>
 
 <script lang="ts" setup>
-import { initCustomFormatter } from 'vue'
+import avater from '../assets/images/WechatIMG626.png'
 import ChallengeQuit from '../components/challengeQuit.vue'
-import { getStudentsInfo } from '@/api'
+import { getStudentsInfo, getHistoryList } from '@/api'
+import { Snackbar } from '@varlet/ui'
+import { useHistory } from '@/utils/useHistory'
+import { useAppStore } from '@/store/app'
 
 const router = useRouter()
-//
+const store = useAppStore()
+
 const is_Inquiry = ref<boolean>(false)
 //ArchivesStudentInfo
 const ArchivesName = ref<string>('')
 const ArchivesUserName = ref<string>('')
 const ArchivesGradeName = ref<string>('')
-const ArchivesID = ref<string>('')
 const ArchivesSchoolName = ref<string>('')
 //ArchivesTestInfo
-const TestRoomName = ref<string>('')
-const QuestionsNumber = ref<string>('')
-const TestAchievement = ref<string>('')
-const TestTime = ref<string>('')
+const { designation, theme, testTime, startTime, endTime, score } = useHistory()
 
 //生命周期
 onMounted(() => {
   //
   intiStudentInfo()
+  requestHistory()
 })
 
-//go to view the Answer
 function viewAnswer() {
   is_Inquiry.value = true
-  //router.push({path:'/Answer'})
 }
 
 function toScan() {
-  router.push({ path: '/Scan' })
+  router.push({ path: '/scan' })
 }
 
 async function intiStudentInfo() {
   let res: any = await getStudentsInfo()
-  //console.log('>>>>res>>>>intiStudentInfo',res)
   //
   if (res.code === 200) {
     ArchivesName.value = res.data.truename
-    ArchivesUserName.value = res.data.username
+    ArchivesUserName.value = res.data.id // res.data.username
     ArchivesGradeName.value = res.data.grade.name
     ArchivesSchoolName.value = res.data.school
-    ArchivesID.value = res.data.id
   } else {
+    Snackbar.warning(res.msg)
   }
 }
 
+const isGetHistory = ref<boolean>(false)
+const grade = ref<number>(0)
+const testName = ref<string>('')
+const updateTime = ref<string>('')
+async function requestHistory() {
+  try {
+    let res: any = await getHistoryList()
+    if (res.code === 200) {
+      isGetHistory.value = true
+      grade.value = res.data.grade
+      testName.value = res.data.appoints.changes.name
+      updateTime.value = res.data.updated_at
+      initQuestion(res.data.questions)
+      // devLog(['request history: ', res])
+    } else {
+      Snackbar.error(res.msg)
+    }
+  } catch (error: any) {
+    // Snackbar.error(error)
+  }
+}
+
+function initQuestion(question: any) {
+  store.historyQuestionList = question.map((item: any) => {
+    item.options = JSON.parse(item.options)
+    return item
+  })
+}
+
 function handleCheckAnswer() {
-  router.push({ path: '/Answer' })
+  router.push({ path: '/answer' })
 }
 function handleComfirm() {
   // router.push({ path: '/archives' })

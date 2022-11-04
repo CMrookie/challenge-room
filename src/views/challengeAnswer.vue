@@ -4,29 +4,31 @@
       <div class="container-wrap">
         <dev class="btn-back" @click="back"></dev>
         <h2 class="header-title">我的答題</h2>
-        <section v-for="i in 15" :key="i" class="container">
+        <section
+          v-for="(question, index) in historyQuestionList"
+          :key="index"
+          class="container"
+        >
           <!-- <div class="time">60s</div> -->
-          <div class="progress">{{ i + '/20' }}</div>
-          <div class="title">視頻答題</div>
+          <div class="progress">
+            {{ index + 1 + '/' + historyQuestionList.length }}
+          </div>
+          <div class="title">{{ typeList[question.type] }}</div>
           <div>
             <ChallengeQuestion
-              :answer="[0, 0, 0, 0]"
-              :user-answer="[0, 0, 0, 0]"
-              :question="'在影片開頭提及到一位身材壯健，皮膚黝黑，神情嚴肅的官員，請'"
-              :options="[
-                { content: 'aaa' },
-                { content: 'aaa' },
-                { content: 'aaa' },
-                { content: 'aaa' }
-              ]"
+              :assert="true"
+              :answer="defaultAnswer[index]"
+              :user-answer="userAnswer[index]"
+              :question="question.title"
+              :options="question.options"
             ></ChallengeQuestion>
           </div>
-          <div class="analysis-box">
+          <!-- <div class="analysis-box">
             解析:
             <p class="text-x text-black">
               題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx，xxxxx題目解析:xxxxxx
             </p>
-          </div>
+          </div> -->
         </section>
       </div>
     </ul>
@@ -34,11 +36,23 @@
 </template>
 
 <script lang="ts" setup>
+import { useAppStore } from '@/store/app'
 import ChallengeQuestion from '../components/challengeQuestion.vue'
+import { useGenerateAnswer } from '@/utils/useGenerateAnswer'
+
+type Answer = (0 | 1)[][]
+const typeList = ['判斷題', '單選題', '多選題']
+const store = useAppStore()
+const userAnswer = ref<Answer>([])
+const defaultAnswer = ref<Answer>([])
+const historyQuestionList = store.historyQuestionList
+const { generateAnswerList } = useGenerateAnswer()
+userAnswer.value = historyQuestionList.map((item) => {
+  return JSON.parse(item.choose)
+})
+defaultAnswer.value = generateAnswerList(historyQuestionList)
+
 const router = useRouter()
-
-const a = ref('a')
-
 // go back -> archives
 function back() {
   router.push({ path: '/archives' })

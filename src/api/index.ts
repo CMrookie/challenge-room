@@ -58,3 +58,11 @@ export function finishAnswer(data: FinishAnswerData) {
     data
   })
 }
+
+// 查询历史记录
+export function getHistoryList() {
+  return request({
+    url: '/student/get_history_list',
+    method: 'get'
+  })
+}

@@ -270,6 +270,9 @@ async function finishTest() {
     endTime.value = res.data.end_time
     testTime.value = res.data.total_time
     stuName.value = res.data.username
+    store.startTime = startTime.value
+    store.endTime = endTime.value
+    store.testTime = testTime.value
   } catch (error: any) {}
 }
 
@@ -338,7 +341,7 @@ function handleNextClick() {
 
 const router = useRouter()
 function handleCheckAnswer() {
-  router.push({ path: '/Answer' })
+  router.push({ path: '/answer' })
 }
 function handleComfirm() {
   router.push({ path: '/archives' })
