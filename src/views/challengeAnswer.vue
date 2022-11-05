@@ -54,11 +54,7 @@ const isEmpty = ref<boolean>(true)
 const { generateAnswerList } = useGenerateAnswer()
 const historyQuestionList = ref<any[]>([])
 const userAnswer = computed(() => {
-  return historyQuestionList.value
-    .filter((item: any) => {
-      return item.choose
-    })
-    .map((item) => item.choose)
+  return historyQuestionList.value.map((item) => item.choose)
 })
 const defaultAnswer = computed(() => {
   return generateAnswerList(
