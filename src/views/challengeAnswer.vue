@@ -61,10 +61,6 @@ const userAnswer = computed(() => {
     .map((item) => item.choose)
 })
 const defaultAnswer = computed(() => {
-  console.log(
-    'generateAnswerList: ',
-    historyQuestionList.value.filter((item: any) => item)
-  )
   return generateAnswerList(
     historyQuestionList.value.filter((item: any) => item)
   )
@@ -82,7 +78,6 @@ async function getHistoryQuestion() {
           return item
         }
       })
-      console.log('historyQuestion: ', historyQuestionList.value)
     } else {
       Snackbar.warning(res.msg)
     }
