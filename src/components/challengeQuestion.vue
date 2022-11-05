@@ -74,7 +74,9 @@ watch(
 watch(
   () => props.userAnswer,
   () => {
+    console.log('userAnswer: ', props.userAnswer, ' answer: ', props.answer)
     props.answer.forEach((item, index) => {
+      console.log({ item, index })
       setItemState(index)
     })
   }

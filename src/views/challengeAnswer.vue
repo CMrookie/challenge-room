@@ -21,8 +21,8 @@
             <div>
               <ChallengeQuestion
                 :assert="true"
-                :answer="defaultAnswer[index]"
-                :user-answer="userAnswer[index]"
+                :answer="defaultAnswer[index] ?? [0, 0, 0]"
+                :user-answer="userAnswer[index] ?? [0, 0, 0]"
                 :question="question.title"
                 :options="question.options"
               ></ChallengeQuestion>
@@ -46,6 +46,7 @@ import ChallengeQuestion from '../components/challengeQuestion.vue'
 import { useGenerateAnswer } from '@/utils/useGenerateAnswer'
 import { getHistoryList } from '@/api'
 import { Snackbar } from '@varlet/ui'
+import { json } from 'stream/consumers'
 
 // type Answer = (0 | 1)[][]
 const typeList = ['判斷題', '單選題', '多選題']
@@ -53,38 +54,35 @@ const isEmpty = ref<boolean>(true)
 const { generateAnswerList } = useGenerateAnswer()
 const historyQuestionList = ref<any[]>([])
 const userAnswer = computed(() => {
-  let list = []
-  list = historyQuestionList.value.filter((item: any) => {
-    if (!item.correct) return JSON.parse(item.choose)
-  })
-  return list.length === 0 ? [[0, 0, 0, 0]] : list
+  return historyQuestionList.value
+    .filter((item: any) => {
+      return item.choose
+    })
+    .map((item) => item.choose)
 })
 const defaultAnswer = computed(() => {
-  let list = []
-  list = generateAnswerList(
-    historyQuestionList.value.filter((item: any) => {
-      if (!item.correct) return item
-    })
+  console.log(
+    'generateAnswerList: ',
+    historyQuestionList.value.filter((item: any) => item)
   )
-  return list.length === 0 ? [[0, 0, 0, 0]] : list
+  return generateAnswerList(
+    historyQuestionList.value.filter((item: any) => item)
+  )
 })
-// userAnswer.value = historyQuestionList.map((item) => {
-//   return JSON.parse(item.choose)
-// })
-// defaultAnswer.value = generateAnswerList(historyQuestionList)
 
 async function getHistoryQuestion() {
   try {
     const res: any = await getHistoryList()
     if (res.code === 200) {
       isEmpty.value = false
-      console.log('res question: ', res.data.question)
       historyQuestionList.value = res.data.questions.filter((item: any) => {
         if (!item.correct) {
           item.options = JSON.parse(item.options)
+          item.choose = JSON.parse(item.choose)
           return item
         }
       })
+      console.log('historyQuestion: ', historyQuestionList.value)
     } else {
       Snackbar.warning(res.msg)
     }

@@ -12,7 +12,6 @@ declare module '@vue/runtime-core' {
     ChallengeQuestion: typeof import('./src/components/challengeQuestion.vue')['default']
     ChallengeQuit: typeof import('./src/components/challengeQuit.vue')['default']
     ChallengeScroeBoard: typeof import('./src/components/challengeScroeBoard.vue')['default']
-    Layout: typeof import('./src/components/layout/index.vue')['default']
     LoadProgress: typeof import('./src/components/loadProgress.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
