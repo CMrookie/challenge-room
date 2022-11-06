@@ -71,7 +71,7 @@ import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
-import { Snackbar } from '@varlet/ui'
+import { Dialog,Snackbar } from '@varlet/ui'
 import { devLog } from '@/utils/devLog'
 import { useAppStore } from '@/store/app'
 import { useCountdown } from '@/utils/useCountdown'
@@ -165,7 +165,7 @@ function stayAnswer() {
   toggleIsAssert()
   toggleIsTestion()
   isClickNextBtn.value = true
-  setCountdownTime('feeback', 2)
+  setCountdownTime('feeback', 0.7)
   timeCountdown(feebackCountdown)
 }
 
@@ -207,7 +207,7 @@ function nextQuestion() {
 
   nextTick(() => {
     // showFeeback()
-    setCountdownTime('answer', 2)
+    setCountdownTime('answer', 0.5)
     timeCountdown(stayAnswerCountdown)
   })
 }
@@ -334,10 +334,16 @@ function handleNextClick() {
   if (isClickNextBtn.value) return
   if (checkAnswerIsSelect(questionNum.value)) {
     nextQuestion()
-  } else {
-    return Snackbar.warning('溫馨提示：必須選擇答案!')
+  } else { 
+    //Snackbar.warning('溫馨提示：必須選擇答案!')
+    createBasic()
   }
+  
 }
+//弹窗提示
+const createBasic = () => Dialog({message:'溫馨提示：必須選擇答案!',
+    confirmButton: false,
+    cancelButton: false})
 
 const router = useRouter()
 function handleCheckAnswer() {
