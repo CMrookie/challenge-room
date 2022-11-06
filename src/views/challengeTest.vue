@@ -38,6 +38,21 @@
     <footer v-show="isTesting" class="footer">
       <div class="next-btn" @click="handleNextClick">下一題</div>
     </footer>
+    <var-dialog
+      v-model:show="isDialog"
+      title=""
+      :confirm-button="false"
+      :cancel-button="false"
+    >
+      <template #default>
+        <var-cell class="flex justify-center text-center tips">
+          溫馨提示：
+        </var-cell>
+        <var-cell class="flex justify-center text-center tips">
+          必須選擇答案!
+        </var-cell>
+      </template>
+    </var-dialog>
     <transition name="fade">
       <ChallengeMask v-if="isFinish">
         <ChallengeScroeBoard
@@ -71,7 +86,7 @@ import ChallengeQuestion from '../components/challengeQuestion.vue'
 import ChallengeMask from '../components/challengeMask.vue'
 import ChallengeFeeback from '../components/challengeFeeback.vue'
 import ChallengeScroeBoard from '../components/challengeScroeBoard.vue'
-import { Dialog,Snackbar } from '@varlet/ui'
+import { Countdown, Dialog, Snackbar } from '@varlet/ui'
 import { devLog } from '@/utils/devLog'
 import { useAppStore } from '@/store/app'
 import { useCountdown } from '@/utils/useCountdown'
@@ -86,6 +101,7 @@ import { getStudentsInfo, finishAnswer } from '@/api'
  * @params type 1 单选
  * @params type 2 多选
  */
+const isDialog = ref<boolean>(false)
 const typeList = ['判斷題', '單選題', '多選題']
 const isTesting = ref<boolean>(false)
 const store = useAppStore()
@@ -207,7 +223,7 @@ function nextQuestion() {
 
   nextTick(() => {
     // showFeeback()
-    setCountdownTime('answer', 0.5)
+    setCountdownTime('answer', 0)
     timeCountdown(stayAnswerCountdown)
   })
 }
@@ -334,16 +350,21 @@ function handleNextClick() {
   if (isClickNextBtn.value) return
   if (checkAnswerIsSelect(questionNum.value)) {
     nextQuestion()
-  } else { 
-    //Snackbar.warning('溫馨提示：必須選擇答案!')
-    createBasic()
+  } else {
+    clearCountdown()
+    isDialog.value = true
+    setTimeout(() => {
+      isDialog.value = false
+      // timeCountdown(questionCountdown)
+    }, 1000)
   }
-  
 }
-//弹窗提示
-const createBasic = () => Dialog({message:'溫馨提示：必須選擇答案!',
-    confirmButton: false,
-    cancelButton: false})
+watch(
+  () => isDialog.value,
+  () => {
+    if (isDialog.value) timeCountdown(questionCountdown)
+  }
+)
 
 const router = useRouter()
 function handleCheckAnswer() {
@@ -407,6 +428,9 @@ function handleComfirm() {
 }
 .vidwo-wrap {
   padding-top: 2vw;
+}
+.tips {
+  font-size: 3vw;
 }
 </style>
 

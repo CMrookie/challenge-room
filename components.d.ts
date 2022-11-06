@@ -15,5 +15,7 @@ declare module '@vue/runtime-core' {
     LoadProgress: typeof import('./src/components/loadProgress.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VarCell: typeof import('@varlet/ui')['_CellComponent']
+    VarDialog: typeof import('@varlet/ui')['_DialogComponent']
   }
 }

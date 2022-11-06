@@ -5,6 +5,7 @@ import router from './router'
 
 import './assets/style.css'
 import '@varlet/ui/es/snackbar/style'
+import '@varlet/ui/es/dialog/style'
 
 const pinia = createPinia()
 const app = createApp(App)
