@@ -43,14 +43,17 @@
       title=""
       :confirm-button="false"
       :cancel-button="false"
+      style="width: 50vw; height: 25vh;"
     >
       <template #default>
-        <var-cell class="flex justify-center text-center tips text-2xl">
+        <!-- <var-cell class="flex justify-center text-center tips ">
           溫馨提示：
-        </var-cell>
-        <var-cell class="flex justify-center text-center tips text-2xl">
+        </var-cell> -->
+        <!-- <var-cell class="flex justify-center text-center tips ">
           必須選擇答案!
-        </var-cell>
+        </var-cell> -->
+        <p class="flex justify-center text-center text-black tips">溫馨提示：</p>
+        <p class="flex justify-center text-center text-black tips">必須選擇答案!</p>
       </template>
     </var-dialog>
     <transition name="fade">
@@ -356,7 +359,7 @@ function handleNextClick() {
     setTimeout(() => {
       isDialog.value = false
       // timeCountdown(questionCountdown)
-    }, 2000)
+    }, 2500)
   }
 }
 watch(
@@ -430,7 +433,11 @@ function handleComfirm() {
   padding-top: 2vw;
 }
 .tips {
-  font-size: 3vw;
+  font-size: 4vw;
+  letter-spacing: 0.5vw;
+  font-weight: bold;
+  margin-top: 4vw;
+  height: 4vh;
 }
 </style>
 
