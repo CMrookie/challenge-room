@@ -184,7 +184,7 @@ function stayAnswer() {
   toggleIsAssert()
   toggleIsTestion()
   isClickNextBtn.value = true
-  setCountdownTime('feeback', 1)
+  setCountdownTime('feeback', 1.3)
   timeCountdown(feebackCountdown)
 }
 
@@ -226,7 +226,7 @@ function nextQuestion() {
 
   nextTick(() => {
     // showFeeback()
-    setCountdownTime('answer', 1)
+    setCountdownTime('answer', 0.7)
     timeCountdown(stayAnswerCountdown)
   })
 }
