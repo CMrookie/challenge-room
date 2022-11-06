@@ -45,10 +45,10 @@
       :cancel-button="false"
     >
       <template #default>
-        <var-cell class="flex justify-center text-center tips">
+        <var-cell class="flex justify-center text-center tips text-2xl">
           溫馨提示：
         </var-cell>
-        <var-cell class="flex justify-center text-center tips">
+        <var-cell class="flex justify-center text-center tips text-2xl">
           必須選擇答案!
         </var-cell>
       </template>
@@ -181,7 +181,7 @@ function stayAnswer() {
   toggleIsAssert()
   toggleIsTestion()
   isClickNextBtn.value = true
-  setCountdownTime('feeback', 0.7)
+  setCountdownTime('feeback', 1)
   timeCountdown(feebackCountdown)
 }
 
@@ -223,7 +223,7 @@ function nextQuestion() {
 
   nextTick(() => {
     // showFeeback()
-    setCountdownTime('answer', 0)
+    setCountdownTime('answer', 1)
     timeCountdown(stayAnswerCountdown)
   })
 }
@@ -356,7 +356,7 @@ function handleNextClick() {
     setTimeout(() => {
       isDialog.value = false
       // timeCountdown(questionCountdown)
-    }, 1000)
+    }, 2000)
   }
 }
 watch(
