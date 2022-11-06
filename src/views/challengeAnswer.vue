@@ -46,7 +46,6 @@ import ChallengeQuestion from '../components/challengeQuestion.vue'
 import { useGenerateAnswer } from '@/utils/useGenerateAnswer'
 import { getHistoryList } from '@/api'
 import { Snackbar } from '@varlet/ui'
-import { json } from 'stream/consumers'
 
 // type Answer = (0 | 1)[][]
 const typeList = ['判斷題', '單選題', '多選題']
