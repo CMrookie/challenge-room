@@ -5,12 +5,11 @@
       <qrcode-drop-zone v-if="isScan" @decode="onDecode">
         <qrcode-stream camera="rear" @decode="onDecode" />
       </qrcode-drop-zone>
-      <p v-if="!isScan">
+      <p  v-if="!isScan">
         中國歷史挑戰室：
         <br />
-        同學們認真觀看了我們探索室的影片後，這一刻就要給大家一個挑戰！
-        <br />
-        看誰能在最短時間答對最多的問題，當大家離開中心前，得分最高的五位可各獲得一份小禮品作為獎勵！
+          <span>同學們認真觀看了我們探索室的影片後，這一刻就要給大家一個挑戰！</span>
+          <span>看誰能在最短時間答對最多的問題，當大家離開中心前，得分最高的五位可各獲得一份小禮品作為獎勵！🙂</span>
       </p>
       <div v-if="!isScan" class="btn-scan" @click="handleScanClick">
         <i class="icon"></i>
@@ -107,9 +106,15 @@ async function onDecode(code: string) {
   width: 60vw;
   padding-top: 35vw;
   p {
-    @apply bg-white border-2 border-black rounded text-slate-600;
+    @apply   rounded text-black ;
     padding: 2vw;
     font-size: 3vw;
+    background-color: #ffd770;
+  }
+  span{
+    @apply  text-black ;
+    display: block; 
+    text-indent: 2em;
   }
   .btn-scan {
     @apply bg-btn border-2 border-black rounded flex items-center justify-center text-white active:bg-btn-active;
@@ -124,6 +129,7 @@ async function onDecode(code: string) {
       margin-right: 2vw;
     }
   }
+
 }
 .footer {
   @apply absolute bottom-0 flex w-full;
