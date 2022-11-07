@@ -111,7 +111,7 @@ async function onDecode(code: string) {
   console.log(code, 'store: ', store.qrCode)
   store.qrCode = code
   let res = await saveQuestion2Store(code)
-  if (res.msg) {
+  if (res.msg === '15分鐘內,不能再次掃碼答題') {
     isScan.value = false
     return Dialog({ message: '溫馨提示：你已作答完畢' })
   }
