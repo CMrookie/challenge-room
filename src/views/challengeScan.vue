@@ -44,6 +44,28 @@
         個人檔案
       </div>
     </footer>
+    <var-dialog
+      v-model:show="isDialog"
+      title=""
+      :confirm-button="false"
+      :cancel-button="false"
+      style="width: 50vw; height: 25vh"
+    >
+      <template #default>
+        <!-- <var-cell class="flex justify-center text-center tips ">
+          溫馨提示：
+        </var-cell> -->
+        <!-- <var-cell class="flex justify-center text-center tips ">
+          必須選擇答案!
+        </var-cell> -->
+        <p class="flex justify-center text-center text-black tips">
+          溫馨提示：
+        </p>
+        <p class="flex justify-center text-center text-black tips">
+          你已作答完畢!
+        </p>
+      </template>
+    </var-dialog>
   </main>
 </template>
 
@@ -62,6 +84,7 @@ const router = useRouter()
 const { saveQuestion2Store } = useGetQuestion()
 
 const isScan = ref<boolean>(false)
+const isDialog = ref<boolean>(false)
 function handleScanClick() {
   isScan.value = true
 }
@@ -113,7 +136,14 @@ async function onDecode(code: string) {
   let res = await saveQuestion2Store(code)
   if (res.msg) {
     isScan.value = false
-    return Dialog({ message: '溫馨提示：你已作答完畢' })
+    isDialog.value = true
+    setTimeout(() => {
+      isDialog.value = false
+      // timeCountdown(questionCountdown)
+    }, 3000)
+    return 
+    // Dialog({ message: '溫馨提示：你已作答完畢',confirmButton: false,
+    // cancelButton: false })
   }
   store.answerList = generateAnswerList(store.questionList)
   store.userAnswerList = initUserAnswer(store.questionList)
@@ -149,6 +179,13 @@ async function onDecode(code: string) {
       margin-right: 2vw;
     }
   }
+}
+.tips {
+  font-size: 4vw;
+  letter-spacing: 0.5vw;
+  font-weight: bold;
+  margin-top: 4vw;
+  height: 4vh;
 }
 .footer {
   @apply absolute bottom-0 flex w-full;
