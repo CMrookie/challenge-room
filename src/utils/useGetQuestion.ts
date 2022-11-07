@@ -25,7 +25,7 @@ export function useGetQuestion() {
       const res: any = await getQuestions({ code })
       devLog(['getQuestion data: ', res.data])
       if (res.code === 200) {
-        if (res.msg) return res
+        if (res.msg === '15分鐘內,不能再次掃碼答題') return res
         return (store.questionsData = res.data)
       } else {
         tryTime++
