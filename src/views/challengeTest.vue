@@ -43,7 +43,7 @@
       title=""
       :confirm-button="false"
       :cancel-button="false"
-      style="width: 50vw; height: 25vh;"
+      style="width: 50vw; height: 25vh"
     >
       <template #default>
         <!-- <var-cell class="flex justify-center text-center tips ">
@@ -52,8 +52,12 @@
         <!-- <var-cell class="flex justify-center text-center tips ">
           必須選擇答案!
         </var-cell> -->
-        <p class="flex justify-center text-center text-black tips">溫馨提示：</p>
-        <p class="flex justify-center text-center text-black tips">必須選擇答案!</p>
+        <p class="flex justify-center text-center text-black tips">
+          溫馨提示：
+        </p>
+        <p class="flex justify-center text-center text-black tips">
+          必須選擇答案!
+        </p>
       </template>
     </var-dialog>
     <transition name="fade">
