@@ -24,8 +24,10 @@ export function useGetQuestion() {
     try {
       const res: any = await getQuestions({ code })
       devLog(['getQuestion data: ', res.data])
-      if (res.code === 200) return (store.questionsData = res.data)
-      else {
+      if (res.code === 200) {
+        if (res.msg) return res
+        return (store.questionsData = res.data)
+      } else {
         tryTime++
         if (tryTime < 3) {
           Snackbar.error(res.msg)

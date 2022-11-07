@@ -13,7 +13,7 @@
         <div class="flex justify-between">
           <div class="flex flex-col">
             <span></span>
-            <span>学校：{{ ArchivesSchoolName }}</span>
+            <span>學校：{{ ArchivesSchoolName }}</span>
             <span>編號：{{ ArchivesUserName }}</span>
           </div>
           <div class="flex flex-col">

@@ -5,11 +5,15 @@
       <qrcode-drop-zone v-if="isScan" @decode="onDecode">
         <qrcode-stream camera="rear" @decode="onDecode" />
       </qrcode-drop-zone>
-      <p  v-if="!isScan">
+      <p v-if="!isScan">
         中國歷史挑戰室：
         <br />
-          <span>同學們認真觀看了我們探索室的影片後，這一刻就要給大家一個挑戰！</span>
-          <span>看誰能在最短時間答對最多的問題，當大家離開中心前，得分最高的五位可各獲得一份小禮品作為獎勵！🙂</span>
+        <span>
+          同學們認真觀看了我們探索室的影片後，這一刻就要給大家一個挑戰！
+        </span>
+        <span>
+          看誰能在最短時間答對最多的問題，當大家離開中心前，得分最高的五位可各獲得一份小禮品作為獎勵！🙂
+        </span>
       </p>
       <div v-if="!isScan" class="btn-scan" @click="handleScanClick">
         <i class="icon"></i>
@@ -18,6 +22,18 @@
     </div>
 
     <ChallengeQuit @quit="handleQuit"></ChallengeQuit>
+    <!-- <var-dialog
+      title=""
+      message-align="center"
+      :dialog-style="{ width: '60vw' }"
+    >
+      <p
+        class="text-center"
+        style="height: 20vw; line-height: 20vw; font-size: 4vw"
+      >
+        就只是提醒一下
+      </p>
+    </var-dialog> -->
     <footer class="footer">
       <div class="bg-btn border-r text-white active:bg-btn-active">
         <i class="icon bg-test-white"></i>
@@ -35,7 +51,7 @@
 import { devLog } from '@/utils/devLog'
 import ChallengeQuit from '../components/challengeQuit.vue'
 import { QrcodeStream, QrcodeDropZone } from 'qrcode-reader-vue3'
-import { Snackbar } from '@varlet/ui'
+import { Dialog, Snackbar } from '@varlet/ui'
 import { useAppStore } from '@/store/app'
 import { useGetQuestion } from '@/utils/useGetQuestion'
 import { useGenerateAnswer } from '@/utils/usegenerateanswer'
@@ -94,7 +110,11 @@ const { generateAnswerList, initUserAnswer } = useGenerateAnswer()
 async function onDecode(code: string) {
   console.log(code, 'store: ', store.qrCode)
   store.qrCode = code
-  await saveQuestion2Store(code)
+  let res = await saveQuestion2Store(code)
+  if (res.msg) {
+    isScan.value = false
+    return Dialog({ message: '溫馨提示：你已作答完畢' })
+  }
   store.answerList = generateAnswerList(store.questionList)
   store.userAnswerList = initUserAnswer(store.questionList)
   router.push({ path: '/test' })
@@ -106,14 +126,14 @@ async function onDecode(code: string) {
   width: 60vw;
   padding-top: 35vw;
   p {
-    @apply   rounded text-black ;
+    @apply rounded text-black;
     padding: 2vw;
     font-size: 3vw;
     background-color: #ffd770;
   }
-  span{
-    @apply  text-black ;
-    display: block; 
+  span {
+    @apply text-black;
+    display: block;
     text-indent: 2em;
   }
   .btn-scan {
@@ -129,7 +149,6 @@ async function onDecode(code: string) {
       margin-right: 2vw;
     }
   }
-
 }
 .footer {
   @apply absolute bottom-0 flex w-full;
