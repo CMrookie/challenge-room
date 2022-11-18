@@ -38,9 +38,7 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        // target: 'https://dev.history.hkpec.hk',
-        //target: 'https://dev2.history.hkpec.hk',
-        target: 'https://history.hkpec.hk',
+        target: '',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
